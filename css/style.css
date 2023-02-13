@@ -32,21 +32,26 @@ body {
     color: #000;
 }
 
-.display_output {
+#display_output {
     height: 60px;
     background-color: #e4e4e4;
+    color: #000;
     margin-bottom: 6px;
     padding: 6px;
     border-radius: 5px;
     font-size: 48px;
     line-height: 48px;
     text-align: right;
-    color: #000;
 }
 
 .display_formula {
     height: 40px;
     background-color: #e4e4e4;
+    color: #000;
+    font-size: 22px;
+    text-align: right;
+    margin-bottom: 6px;
+    padding: 6px;
     border-radius: 5px;
 }
 
@@ -88,7 +93,11 @@ body {
 }
 
 #button_resetAll, #button_resetCalc {
-    background-color: rgb(180, 0, 0);
+    background-color: #c90c32 /* #BF3030 */; /* https://colorscheme.ru/#3931Tw0w0w0w0 */
+}
+
+#button_resetAll:active, #button_resetCalc:active {
+    background-color: #a70b2a;
 }
 
 #button_sum, #button_solve {
@@ -98,9 +107,12 @@ body {
 }
 
 #button_solve {
-    background-color: rgb(200, 113, 0);
+    background-color: #00A779 /* #269926 */; /* https://colorscheme.ru/#3931Tw0w0w0w0 */
 }
 
-#button_solve:active, #button_resetAll:active, #button_resetCalc:active {
-    background-color: rgb(180, 180, 180);
+#button_solve:active {
+    background-color: #008761;
 }
+
+
+
