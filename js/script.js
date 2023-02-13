@@ -13,13 +13,13 @@ const writeNumber = (newNumberChar) => {
   document.getElementById('display_output').innerHTML = result
 }
 
-let checkFirstValue = () => {
-  if (firstValue === 0) {
-    firstValue = result
-  }
-  console.log(firstValue) // check current firstValue
-  document.getElementById('display_formula').innerHTML = firstValue
-}
+// let checkFirstValue = () => {
+//   if (firstValue === 0) {
+//     firstValue = result
+//   }
+//   console.log(firstValue) // check current firstValue
+//   document.getElementById('display_formula').innerHTML = firstValue
+// }
 
 const buttonNumbers = document.getElementsByClassName('button_number')
 
