@@ -23,13 +23,20 @@
                 <div class="upperBar_numberOfDecimals">
                     F
                 </div>
+
+                <div class="upperBar_currentResult currentResult">
+                    <div class="currentResult_text">Current result:</div>
+
+                    <input type="text" id="currentResult_number"
+                    placeholder="0" value="" readonly>
+                </div>
             </div>
 
-            <div id="display_output">0</div>
+            <input type="text" id="display_output"
+            readonly placeholder="0" value="">
 
-            <div class="display_formula">
-                Your formula
-            </div>
+            <input type="text" id="display_formula"
+            readonly placeholder="Your formula" value="">
         </div>
         <!-- Display end -->
 
@@ -82,7 +89,8 @@
                 9
             </button>
             
-            <button class="button" id="button_devide">
+            <button class="button button_operBinary" id="button_devide"
+            value="/">
                 ÷
             </button>
             
@@ -108,11 +116,13 @@
                 6
             </button>
             
-            <button class="button" id="button_multiply">
+            <button class="button button_operBinary" id="button_multiply"
+            value="*">
                 ×
             </button>
             
-            <button class="button" id="button_deduct">
+            <button class="button button_operBinary" id="button_deduct"
+            value="-">
                 -
             </button>
             
@@ -133,7 +143,8 @@
                 3
             </button>
             
-            <button class="button" id="button_sum">
+            <button class="button button_operBinary" id="button_sum"
+            value="+">
                 <div id="button_sumSign">+</div>
             </button>
             
