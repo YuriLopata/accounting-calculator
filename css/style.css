@@ -21,6 +21,7 @@ body {
 .upperBar {
     height: 40px;
     display: flex;
+    justify-content: space-between;
     align-items: center;
     background-color: #e4e4e4;
     margin-bottom: 6px;
@@ -32,25 +33,45 @@ body {
     color: #000;
 }
 
+.currentResult {
+    display: flex;
+    align-items: center;
+}
+
+.currentResult_text {
+    color: #000;
+    font-size: 22px;
+}
+
+#currentResult_number {
+    width: 20px; /* temporarily */
+    background-color: #e4e4e4;
+    text-align: right;
+    border: none;
+}
+
 #display_output {
+    width: 100%;
     height: 60px;
     background-color: #e4e4e4;
     color: #000;
     margin-bottom: 6px;
     padding: 6px;
+    border: none;
     border-radius: 5px;
     font-size: 48px;
     line-height: 48px;
     text-align: right;
 }
 
-.display_formula {
+#display_formula {
+    width: 100%;
     height: 40px;
     background-color: #e4e4e4;
     color: #000;
+    border: none;
     font-size: 22px;
     text-align: right;
-    margin-bottom: 6px;
     padding: 6px;
     border-radius: 5px;
 }

@@ -1,38 +1,83 @@
 'use strict'
 
-let result = document.getElementById('display_output').innerHTML
+let result = ''
 
-// let firstValue = 0
-// let secondValue = 0
-// let thirdValue = 0
-// let fourthValue = 0
-// let fifthValue = 0
+// let currentResult
 
-const writeNumber = (newNumberChar) => {
-  result = Number(result + newNumberChar)
-  document.getElementById('display_output').innerHTML = result
-}
+// let formula = document.getElementById('display_formula').value
 
-// let checkFirstValue = () => {
-//   if (firstValue === 0) {
-//     firstValue = result
-//   }
-//   console.log(firstValue) // check current firstValue
-//   document.getElementById('display_formula').innerHTML = firstValue
+const operValues = []
+
+// const checkInput = () => {
+//   for...
 // }
 
-const buttonNumbers = document.getElementsByClassName('button_number')
+const writeResult = (newNumberChar) => {
+  result += newNumberChar
+  document.getElementById('display_output').value = result
+}
 
-for (const button of buttonNumbers) {
-  button.onclick = (e) => {
-    writeNumber(e.target.value)
+const writeFormula = (newNumberChar) => {
+  document.getElementById('display_formula').value += newNumberChar
+}
+
+const clearCalc = () => {
+  result = ''
+  document.getElementById('display_output').value = ''
+}
+
+const clearFormula = () => {
+  formula = ''
+  document.getElementById('display_formula').value = ''
+}
+
+const findOperChar = () => {
+  if (result.indexOf('*') > -1 || // simplify!
+  result.indexOf('/') > -1 ||
+  result.indexOf('+') > -1 ||
+  result.indexOf('-') > -1) {
+    clearCalc()
   }
 }
 
-let sum = (firstSummand, secondSummand) => {
-  document.getElementById('display_output').innerHTML = result + '+'
+const buttonNumbers = document.getElementsByClassName('button_number')
+
+for (const buttonNum of buttonNumbers) {
+  buttonNum.onclick = (e) => {
+    // if (result !== '') {
+    //   clearCalc()
+    // }
+    findOperChar()
+    writeResult(e.target.value)
+    writeFormula(e.target.value)
+  }
 }
 
-document.getElementById('button_sum').onclick = () => {
-  sum(firstValue, secondValue)
+const addOperValue = (newValue) => {
+  operValues.push(newValue)
+//   console.log(operValues)
+}
+
+const solve = (firstValue, secondValue) => {
+//   result = Number(firstValue + operBinaryButton + secondValue)
+//   document.getElementById('display_output').value = currentResult
+  currentResult = operValues[operValues.length - 1]
+}
+
+const operBinaryButtons = document.getElementsByClassName('button_operBinary')
+
+for (const operBinaryButton of operBinaryButtons) {
+  operBinaryButton.onclick = (e) => {
+    const enteredValue = result
+    addOperValue(enteredValue)
+    writeResult(e.target.value)
+    writeFormula(e.target.value)
+    solve(0, 0)
+  }
+}
+
+document.getElementById('button_resetCalc').onclick = () => {
+  console.log('Calculator cleared!')
+  clearCalc()
+  clearFormula()
 }
