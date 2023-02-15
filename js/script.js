@@ -2,9 +2,9 @@
 
 let result = ''
 
-let currentResult
+// let currentResult
 
-let formula = document.getElementById('display_formula').value
+// let formula = document.getElementById('display_formula').value
 
 const operValues = []
 
