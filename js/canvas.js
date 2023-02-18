@@ -1,3 +1,3 @@
-// const form = '2 + 3'
-
-// console.log(eval(form))
+// let str = 'beautiful'
+// str = str.slice(0, str.length - 1)
+// console.log(str)

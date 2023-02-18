@@ -8,7 +8,7 @@ let formula = document.getElementById('display_formula')
 
 let sign = ''
 
-const operValues = []
+let operValues = []
 
 // const checkInput = () => {
 //   for...
@@ -31,6 +31,23 @@ const writeFormula = (newNumberChar) => {
   document.getElementById('display_formula').value += newNumberChar
 }
 
+const addOperValue = (newOperValue) => {
+  operValues.push(newOperValue)
+}
+
+const findOperChar = () => {
+  if (result.indexOf('×') > -1 || // simplify!
+  result.indexOf('÷') > -1 ||
+  result.indexOf('+') > -1 ||
+  result.indexOf('-') > -1) {
+    clearResult()
+  }
+}
+
+const clearOperValues = () => {
+  operValues = []
+}
+
 const clearResult = () => {
   result = ''
   document.getElementById('middleBar_result').value = ''
@@ -42,8 +59,24 @@ const clearFormula = () => {
 }
 
 const clearCurrentResult = () => {
-  formula = ''
+  currentResult = ''
   document.getElementById('upperBar_currentResult').value = ''
+}
+
+const clearCalc = () => {
+  clearCurrentResult()
+  clearResult()
+  clearFormula()
+  clearOperValues()
+}
+
+const delLastChar = (str) => {
+  str = str.slice(0, str.length - 1)
+  document.getElementById('middleBar_result').value = ''
+  document.getElementById('middleBar_result').value = str
+  document.getElementById('upperBar_currentResult').value = str
+  document.getElementById('display_formula').value = str
+  result = str
 }
 
 const solveBinary = (x, oper, y) => {
@@ -63,30 +96,21 @@ const solveBinary = (x, oper, y) => {
   }
 }
 
-const addOperValue = (newOperValue) => {
-  operValues.push(newOperValue)
-  console.clear()
-}
-
-const findOperChar = () => {
-  if (result.indexOf('×') > -1 || // simplify!
-  result.indexOf('÷') > -1 ||
-  result.indexOf('+') > -1 ||
-  result.indexOf('-') > -1) {
-    clearResult()
-  }
-}
+// const solveUnary
 
 document.getElementById('button_resetCalc').onclick = () => {
-  clearResult()
-  clearFormula()
-  clearCurrentResult()
+  clearCalc()
 }
 
 document.getElementById('button_resetAll').onclick = () => {
-  clearResult()
-  clearFormula()
-  clearCurrentResult()
+  clearCalc()
+}
+
+document.getElementById('button_delLastChar').onclick = () => {
+  delLastChar(result)
+  if (addOperValue.length === 1) {
+    clearOperValues()
+  }
 }
 
 const buttonNumbers = document.getElementsByClassName('button_number')
@@ -116,7 +140,6 @@ for (const operBinaryButton of operBinaryButtons) {
     writeResult(e.target.value)
     writeCurrentResult(currentResult)
     writeFormula(e.target.value)
-    console.log(operValues)
   }
 }
 
