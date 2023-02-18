@@ -20,20 +20,25 @@
         <!-- Display start -->
         <div class="display">
             <div class="display_upperBar upperBar">
-                <div class="upperBar_numberOfDecimals">
-                    F
-                </div>
+                <button id="numberOfDecimals" title="Decimal places">
+                    F:<br>initial
+                </button>
 
-                <div class="upperBar_currentResult currentResult">
-                    <div class="currentResult_text">Current result:</div>
-
-                    <input type="text" id="currentResult_number"
-                    placeholder="0" value="" readonly>
-                </div>
+                <input type="text" id="upperBar_currentResult"
+                placeholder="Current result" value="" readonly>
             </div>
 
-            <input type="text" id="display_output"
-            readonly placeholder="0" value="">
+            <div class="display_middleBar middleBar">
+                <div class="middleBar_mem">
+                    <button id="middleBar_memButton">M1:</button>
+
+                    <input type="text" id="middleBar_memValue"
+                    placeholder="0" value="" readonly>
+                </div>
+                
+                <input type="text" id="middleBar_result"
+                readonly placeholder="0" value="">
+            </div>
 
             <input type="text" id="display_formula"
             readonly placeholder="Your formula" value="">
@@ -90,7 +95,7 @@
             </button>
             
             <button class="button button_operBinary" id="button_devide"
-            value="/">
+            value="÷">
                 ÷
             </button>
             
@@ -117,7 +122,7 @@
             </button>
             
             <button class="button button_operBinary" id="button_multiply"
-            value="*">
+            value="×">
                 ×
             </button>
             
@@ -145,11 +150,12 @@
             
             <button class="button button_operBinary" id="button_sum"
             value="+">
-                <div id="button_sumSign">+</div>
+                +
             </button>
-            
-            <button class="button" id="button_solve">
-                <div id="button_solveSign">=</div>
+
+            <button class="button button_operUnary" id="button_solve"
+            value="=">
+                =
             </button>
             
             <button class="button" id="button_resetCalc"
@@ -173,6 +179,8 @@
     </div>
     <!-- Workspace end -->
 
+    <script src="./js/canvas.js"></script>
+    <!-- <script src="./js/solve.js"></script> -->
     <script src="./js/script.js"></script>
 </body>
 </html>

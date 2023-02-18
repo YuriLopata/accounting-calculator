@@ -19,8 +19,8 @@ body {
 }
 
 .upperBar {
-    height: 40px;
     display: flex;
+    height: 40px;
     justify-content: space-between;
     align-items: center;
     background-color: #e4e4e4;
@@ -29,36 +29,64 @@ body {
     border-radius: 4px;
 }
 
-.upperBar_numberOfDecimals {
-    color: #000;
-}
-
-.currentResult {
-    display: flex;
-    align-items: center;
-}
-
-.currentResult_text {
-    color: #000;
-    font-size: 22px;
-}
-
-#currentResult_number {
-    width: 20px; /* temporarily */
+#numberOfDecimals {
     background-color: #e4e4e4;
+    color: #000;
+    text-align: left;
+    font-size: 14px;
+    line-height: 14px;
+    padding: 0;
+    margin-right: 10px;
+    border: none;
+    border-radius: 4px;
+}
+
+#upperBar_currentResult {
+    max-width: 70%; /* temporarily */
+    background-color: #e4e4e4;
+    color: #000;
     text-align: right;
     border: none;
 }
 
-#display_output {
-    width: 100%;
+.middleBar {
     height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #e4e4e4;
+    border-radius: 5px;
+    padding: 6px;
+    margin-bottom: 6px;
+}
+
+.middleBar_mem {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+#middleBar_memButton, #middleBar_memValue {
+    align-content: center;
     background-color: #e4e4e4;
     color: #000;
-    margin-bottom: 6px;
-    padding: 6px;
+    font-size: 22px;
+    line-height: 22px;
+    padding: 0;
     border: none;
-    border-radius: 5px;
+}
+
+#middleBar_memValue {
+    width: 30px;
+}
+
+#middleBar_result {
+    width: 60%;
+    height: 48px;
+    background-color: #e4e4e4;
+    color: #000;
+    border: none;
     font-size: 48px;
     line-height: 48px;
     text-align: right;
@@ -84,7 +112,6 @@ body {
 }
 
 .button {
-    padding: 8px;
     text-align: center;
     background-color: rgb(110, 110, 110);
     color: #fff;
