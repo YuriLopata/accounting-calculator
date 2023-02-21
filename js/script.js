@@ -1,12 +1,12 @@
 'use strict'
 
-let result = ''
-
 let currentResult = ''
 
-let formula = document.getElementById('display_formula')
+let result = ''
 
 let sign = ''
+
+let solve = false
 
 let operValues = []
 
@@ -14,12 +14,12 @@ let operValues = []
 //   for...
 // }
 
-const writeFirstCurrentResult = (newNumberChar) => {
+const writeNewCurrentResult = (newNumberChar) => {
   document.getElementById('upperBar_currentResult').value += newNumberChar
 }
 
-const writeCurrentResult = () => {
-  document.getElementById('upperBar_currentResult').value = currentResult
+const writeCurrentResult = (newNumberChar) => {
+  document.getElementById('upperBar_currentResult').value = newNumberChar
 }
 
 const writeResult = (newNumberChar) => {
@@ -35,15 +35,6 @@ const addOperValue = (newOperValue) => {
   operValues.push(newOperValue)
 }
 
-const findOperChar = () => {
-  if (result.indexOf('×') > -1 || // simplify!
-  result.indexOf('÷') > -1 ||
-  result.indexOf('+') > -1 ||
-  result.indexOf('-') > -1) {
-    clearResult()
-  }
-}
-
 const clearOperValues = () => {
   operValues = []
 }
@@ -54,7 +45,6 @@ const clearResult = () => {
 }
 
 const clearFormula = () => {
-  formula = ''
   document.getElementById('display_formula').value = ''
 }
 
@@ -68,6 +58,8 @@ const clearCalc = () => {
   clearResult()
   clearFormula()
   clearOperValues()
+  solve = false
+  sign = ''
 }
 
 const delLastChar = (str) => {
@@ -75,8 +67,17 @@ const delLastChar = (str) => {
   document.getElementById('middleBar_result').value = ''
   document.getElementById('middleBar_result').value = str
   document.getElementById('upperBar_currentResult').value = str
-  document.getElementById('display_formula').value = str
+  document.getElementById('display_formula').value = str // fix!
   result = str
+}
+
+const findOperChar = () => {
+  if (result.indexOf('×') > -1 || // simplify!
+  result.indexOf('÷') > -1 ||
+  result.indexOf('+') > -1 ||
+  result.indexOf('-') > -1) {
+    clearResult()
+  }
 }
 
 const solveBinary = (x, oper, y) => {
@@ -96,7 +97,31 @@ const solveBinary = (x, oper, y) => {
   }
 }
 
-// const solveUnary
+const solveUnary = (x, oper) => {
+  switch (oper) {
+  case '=':
+    addOperValue(result)
+    solveBinary(currentResult, sign, operValues[operValues.length - 1])
+    sign = oper
+    writeCurrentResult('')
+    clearResult()
+    writeResult(currentResult)
+    if (document.getElementById('display_formula').value !== '') {
+      writeFormula(oper + currentResult)
+    }
+    clearOperValues()
+    addOperValue(currentResult)
+    solve = true
+    result = ''
+    break
+  case '√':
+    writeFormula('; ' + oper + result + '=')
+    currentResult = Math.sqrt(Number(x))
+    writeFormula(currentResult)
+    clearResult()
+    break
+  }
+}
 
 document.getElementById('button_resetCalc').onclick = () => {
   clearCalc()
@@ -116,11 +141,28 @@ document.getElementById('button_delLastChar').onclick = () => {
 const buttonNumbers = document.getElementsByClassName('button_number')
 for (const buttonNum of buttonNumbers) {
   buttonNum.onclick = (e) => {
-    findOperChar()
-    writeResult(e.target.value)
-    writeFormula(e.target.value)
+    if (solve && sign === '=') {
+      clearResult()
+      clearOperValues()
+      clearCurrentResult()
+      writeResult(e.target.value)
+      writeFormula('; ' + e.target.value)
+      sign = ''
+    } else if (solve && sign !== '=') {
+      findOperChar()
+      writeResult(e.target.value)
+      writeFormula(e.target.value)
+    } else {
+      findOperChar()
+      writeResult(e.target.value)
+      writeFormula(e.target.value)
+    }
+    if (document.getElementById('display_formula').value === '' &&
+    sign === '=' && result === '') {
+      document.getElementById('display_formula').value = ''
+    }
     if (currentResult === '') {
-      writeFirstCurrentResult(e.target.value)
+      writeNewCurrentResult(e.target.value)
     }
   }
 }
@@ -135,6 +177,7 @@ for (const operBinaryButton of operBinaryButtons) {
     } else {
       solveBinary(currentResult, sign, operValues[operValues.length - 1])
     }
+
     sign = e.target.value
 
     writeResult(e.target.value)
@@ -146,13 +189,7 @@ for (const operBinaryButton of operBinaryButtons) {
 const operUnaryButtons = document.getElementsByClassName('button_operUnary')
 for (const operUnaryButton of operUnaryButtons) {
   operUnaryButton.onclick = (e) => {
-    addOperValue(result)
-    solveBinary(currentResult, sign, operValues[operValues.length - 1])
-    sign = e.target.value
-
-    writeCurrentResult(currentResult)
-    clearResult()
+    solveUnary(currentResult, e.target.value)
     writeResult(currentResult)
-    writeFormula(e.target.value + currentResult)
   }
 }

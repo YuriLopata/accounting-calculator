@@ -41,7 +41,7 @@
             </div>
 
             <input type="text" id="display_formula"
-            readonly placeholder="Your formula" value="">
+            readonly placeholder="Entire formula" value="">
         </div>
         <!-- Display end -->
 
@@ -67,7 +67,7 @@
                 M+
             </button>
             
-            <button class="button" id="button_percent"
+            <button class="button button_operUnary" id="button_percent"
             title="Interest calculation">
                 %
             </button>
@@ -77,7 +77,7 @@
                 MU
             </button>
             
-            <button class="button" id="button_changeSign"
+            <button class="button button_operUnary" id="button_changeSign"
             title="Change sign">
                 +/-
             </button>
@@ -99,8 +99,8 @@
                 ÷
             </button>
             
-            <button class="button" id="button_square"
-            title="Square root">
+            <button class="button button_operUnary" id="button_square"
+            value="√" title="Square root">
                 √
             </button>
             
@@ -126,8 +126,8 @@
                 ×
             </button>
             
-            <button class="button button_operBinary" id="button_deduct"
-            value="-">
+            <button class="button button_operBinary"
+            value="-" id="button_deduct">
                 -
             </button>
             
