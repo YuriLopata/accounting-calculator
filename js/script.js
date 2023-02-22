@@ -1,13 +1,9 @@
 'use strict'
 
 let currentResult = ''
-
 let result = ''
-
 let sign = ''
-
 let solve = false
-
 let operValues = []
 
 // const checkInput = () => {
@@ -25,6 +21,10 @@ const writeCurrentResult = (newNumberChar) => {
 const writeResult = (newNumberChar) => {
   result += newNumberChar
   document.getElementById('middleBar_result').value = result
+}
+
+const rewriteResult = (num) => {
+  document.getElementById('middleBar_result').value = num
 }
 
 const writeFormula = (newNumberChar) => {
@@ -65,7 +65,7 @@ const clearCalc = () => {
 const delLastChar = (str) => {
   str = str.slice(0, str.length - 1)
   document.getElementById('middleBar_result').value = ''
-  document.getElementById('middleBar_result').value = str
+  rewriteResult(str)
   document.getElementById('upperBar_currentResult').value = str
   document.getElementById('display_formula').value = str // fix!
   result = str
@@ -77,6 +77,14 @@ const findOperChar = () => {
   result.indexOf('+') > -1 ||
   result.indexOf('-') > -1) {
     clearResult()
+  }
+}
+
+const changeSign = (num) => {
+  if (Math.sign(Number(num)) === 1) {
+    return -Math.abs(num)
+  } else {
+    return Math.abs(num)
   }
 }
 
@@ -106,20 +114,43 @@ const solveUnary = (x, oper) => {
     writeCurrentResult('')
     clearResult()
     writeResult(currentResult)
-    if (document.getElementById('display_formula').value !== '') {
+    if (document.getElementById('display_formula').value !== '' &&
+    solve !== true) {
       writeFormula(oper + currentResult)
     }
     clearOperValues()
     addOperValue(currentResult)
     solve = true
     result = ''
+    writeResult(currentResult)
     break
   case '√':
-    writeFormula('; ' + oper + result + '=')
+    if (sign === '=') {
+      writeFormula('; ' + oper + result + '=')
+    } else {
+      x = document.getElementById('middleBar_result').value
+      clearFormula()
+      writeFormula(oper + result + '=')
+    }
     currentResult = Math.sqrt(Number(x))
-    writeFormula(currentResult)
     clearResult()
+    rewriteResult(currentResult)
+    writeFormula(currentResult)
+    document.getElementById('upperBar_currentResult').value = ''
+    sign = '√'
+    solve = true
+    writeResult(currentResult)
     break
+  case '+/-':
+    if (result !== '') {
+      x = changeSign(result)
+      result = x
+      currentResult = x
+      writeCurrentResult(x)
+      rewriteResult(x)
+      clearFormula()
+      writeFormula(x)
+    }
   }
 }
 
@@ -141,17 +172,13 @@ document.getElementById('button_delLastChar').onclick = () => {
 const buttonNumbers = document.getElementsByClassName('button_number')
 for (const buttonNum of buttonNumbers) {
   buttonNum.onclick = (e) => {
-    if (solve && sign === '=') {
+    if (solve && (sign === '=' || sign === '√')) {
       clearResult()
       clearOperValues()
       clearCurrentResult()
       writeResult(e.target.value)
       writeFormula('; ' + e.target.value)
       sign = ''
-    } else if (solve && sign !== '=') {
-      findOperChar()
-      writeResult(e.target.value)
-      writeFormula(e.target.value)
     } else {
       findOperChar()
       writeResult(e.target.value)
@@ -189,7 +216,42 @@ for (const operBinaryButton of operBinaryButtons) {
 const operUnaryButtons = document.getElementsByClassName('button_operUnary')
 for (const operUnaryButton of operUnaryButtons) {
   operUnaryButton.onclick = (e) => {
-    solveUnary(currentResult, e.target.value)
-    writeResult(currentResult)
+    if (result !== '') {
+      solveUnary(currentResult, e.target.value)
+    }
   }
 }
+
+// MEMORY START
+let mem1 = ''
+let mem2 = ''
+let mem3 = ''
+
+const memBtn = document.querySelector('#middleBar_memButton')
+const memVal = document.querySelector('#middleBar_memValue')
+const getMemNum = () => {
+  if (memBtn.textContent.indexOf('1') > -1) {
+    return 'M1:'
+  } else if (memBtn.textContent.indexOf('2') > -1) {
+    return 'M2:'
+  } else {
+    return 'M3:'
+  }
+}
+const changeMemNum = () => {
+  memBtn.textContent = getMemNum()
+  memVal.value = mem1
+}
+memBtn.addEventListener('click', changeMemNum)
+
+// const savePosMemBtn = document.querySelector('#button_savePositive')
+// const saveNegMemBtn = document.querySelector('#button_saveNegative')
+// const saveMemNum = (num) => {
+//   memVal.value = result
+// }
+// savePosMemBtn.onclick = () => {
+//   let currentMemNum = getMemNum()
+//   saveMemNum()
+// }
+
+// // MEMORY END
