@@ -4,21 +4,22 @@ let currentResult = ''
 let result = ''
 let sign = ''
 let solve = false
+const formula = document.getElementById('display_formula')
 let operValues = []
 
 let mems = ['', '', '']
 const memBtn = document.querySelector('#middleBar_memButton')
 const memVal = document.querySelector('#middleBar_memValue')
 
-const writeNewCurrentResult = (newNumberChar) => {
+const addToCurrentResult = (newNumberChar) => {
   document.getElementById('upperBar_currentResult').value += newNumberChar
 }
 
-const writeCurrentResult = (newNumberChar) => {
+const rewriteCurrentResult = (newNumberChar) => {
   document.getElementById('upperBar_currentResult').value = newNumberChar
 }
 
-const writeResult = (newNumberChar) => {
+const addToResult = (newNumberChar) => {
   result += newNumberChar
   document.getElementById('middleBar_result').value = result
 }
@@ -27,8 +28,12 @@ const rewriteResult = (num) => {
   document.getElementById('middleBar_result').value = num
 }
 
-const writeFormula = (newNumberChar) => {
+const addToFormula = (newNumberChar) => {
   document.getElementById('display_formula').value += newNumberChar
+}
+
+const rewriteFormula = (newNumberChar) => {
+  formula.value = newNumberChar
 }
 
 const addOperValue = (newOperValue) => {
@@ -39,18 +44,30 @@ const clearOperValues = () => {
   operValues = []
 }
 
-const clearResult = () => {
+const clearResultValue = () => {
   result = ''
+}
+const clearResultText = () => {
   document.getElementById('middleBar_result').value = ''
+}
+const clearResult = () => {
+  clearResultValue()
+  clearResultText()
 }
 
 const clearFormula = () => {
   document.getElementById('display_formula').value = ''
 }
 
-const clearCurrentResult = () => {
+const clearCurrentResultValue = () => {
   currentResult = ''
+}
+const clearCurrentResultText = () => {
   document.getElementById('upperBar_currentResult').value = ''
+}
+const clearCurrentResult = () => {
+  clearCurrentResultValue()
+  clearCurrentResultText()
 }
 
 const clearCalc = () => {
@@ -68,23 +85,26 @@ const clearMemory = () => {
 }
 
 const delLastChar = (str) => {
-  str = str.slice(0, str.length - 1)
-  document.getElementById('middleBar_result').value = ''
-  rewriteResult(str)
-  document.getElementById('upperBar_currentResult').value = str
-  document.getElementById('display_formula').value = str // fix!
-  result = str
+  const strShorted = str.slice(0, str.length - 1)
+  const formulaShorted = formula.value.slice(0, formula.value.length - 1)
+  if (result !== '' && formula.value !== '') {
+    rewriteCurrentResult(strShorted)
+    rewriteResult(strShorted)
+    rewriteFormula(formulaShorted)
+  }
+  return strShorted
 }
 
-const findOperChar = () => {
-  if (result.indexOf('×') > -1 || // simplify!
-  result.indexOf('÷') > -1 ||
-  result.indexOf('+') > -1 ||
-  result.indexOf('-') > -1) {
-    clearResult()
+const findOperChar = (str) => {
+  if (str.indexOf('×') > -1 || // simplify!
+  str.indexOf('÷') > -1 ||
+  str.indexOf('+') > -1 ||
+  str.indexOf('-') > -1) {
+    return true
+  } else {
+    return false
   }
 }
-
 const changeSign = (num) => {
   if (Math.sign(Number(num)) === 1) {
     return -Math.abs(num)
@@ -110,30 +130,30 @@ const solveUnary = (x, oper) => {
   switch (oper) {
   case '√':
     if (sign === '=') {
-      writeFormula('; ' + oper + result + '=')
+      addToFormula('; ' + oper + result + '=')
     } else {
       x = document.getElementById('middleBar_result').value
       clearFormula()
-      writeFormula(oper + result + '=')
+      addToFormula(oper + result + '=')
     }
     currentResult = Math.sqrt(Number(x))
     clearResult()
     rewriteResult(currentResult)
-    writeFormula(currentResult)
-    document.getElementById('upperBar_currentResult').value = ''
+    addToFormula(currentResult)
+    clearCurrentResultText()
     sign = '√'
     solve = true
-    writeResult(currentResult)
+    addToResult(currentResult)
     break
   case '+/-':
     if (result !== '') {
       x = changeSign(result)
       result = x
       currentResult = x
-      writeCurrentResult(x)
+      rewriteCurrentResult(x)
       rewriteResult(x)
       clearFormula()
-      writeFormula(x)
+      addToFormula(x)
     }
   }
 }
@@ -148,7 +168,7 @@ document.getElementById('button_resetAll').onclick = () => {
 }
 
 document.getElementById('button_delLastChar').onclick = () => {
-  delLastChar(result)
+  result = delLastChar(result)
   if (addOperValue.length === 1) {
     clearOperValues()
   }
@@ -158,21 +178,30 @@ document.getElementById('button_resetMemory').onclick = () => {
   clearMemory()
 }
 
+document.getElementById('button_showMemory').onclick = () => {
+  if (document.getElementById('display_formula').value !== '') {
+    currentResult = memVal.value
+    result = memVal.value
+    addToFormula(';' + ' ' + memVal.value)
+  }
+  rewriteCurrentResult(memVal.value)
+  rewriteResult(memVal.value)
+}
+
 document.getElementById('button_solve').onclick = () => {
   if (sign !== '=' && currentResult !== '') {
     addOperValue(result)
     currentResult =
     solveBinary(currentResult, sign, operValues[operValues.length - 1])
     sign = '='
-    writeCurrentResult('')
+    rewriteCurrentResult('')
     clearResult()
-    writeResult(currentResult)
+    addToResult(currentResult)
     if (document.getElementById('display_formula').value !== '' &&
     solve === false) {
-      writeFormula('=' + currentResult)
+      addToFormula('=' + currentResult)
     }
     clearOperValues()
-    // addOperValue(currentResult)
     solve = true
     rewriteResult(currentResult)
   }
@@ -181,24 +210,39 @@ document.getElementById('button_solve').onclick = () => {
 const buttonNumbers = document.getElementsByClassName('button_number')
 for (const buttonNum of buttonNumbers) {
   buttonNum.onclick = (e) => {
-    if (solve && (sign === '=' || sign === '√')) {
-      clearResult()
-      clearOperValues()
-      clearCurrentResult()
-      writeResult(e.target.value)
-      writeFormula('; ' + e.target.value)
-      sign = ''
-    } else {
-      findOperChar()
-      writeResult(e.target.value)
-      writeFormula(e.target.value)
-    }
-    if (document.getElementById('display_formula').value === '' &&
-    sign === '=' && result === '') {
-      document.getElementById('display_formula').value = ''
-    }
-    if (currentResult === '') {
-      writeNewCurrentResult(e.target.value)
+    if ((e.target.value !== '00' || e.target.value !== '0' ||
+    e.target.value !== '.') && result !== '') {
+      if (solve && (sign === '=' || sign === '√')) {
+        clearResult()
+        clearOperValues()
+        clearCurrentResult()
+        addToResult(e.target.value)
+        addToFormula('; ' + e.target.value)
+        sign = '' // necessary?
+      } else {
+        if (findOperChar(result)) {
+          clearResult()
+        }
+        addToResult(e.target.value)
+        addToFormula(e.target.value)
+      }
+      if (document.getElementById('display_formula').value === '' &&
+      sign === '=' && result === '') {
+        clearFormula()
+      }
+      if (currentResult === '') {
+        addToCurrentResult(e.target.value)
+      }
+    } else if (e.target.value !== '00' && e.target.value !== '0' &&
+    result === '') {
+      if (e.target.value === '.') { // дописать условие чтобы перед точкой вписывался 0
+        addToCurrentResult('0')
+        addToResult('0')
+        addToFormula('0')
+      }
+      addToCurrentResult(e.target.value)
+      addToResult(e.target.value)
+      addToFormula(e.target.value)
     }
   }
 }
@@ -206,9 +250,12 @@ for (const buttonNum of buttonNumbers) {
 const operBinaryButtons = document.getElementsByClassName('button_operBinary')
 for (const operBinaryButton of operBinaryButtons) {
   operBinaryButton.onclick = (e) => {
-    addOperValue(result) // repeating start
+    addOperValue(result)
 
-    if (operValues.length < 2) {
+    if (findOperChar(result) &&
+    sign !== '=') {
+      result = delLastChar(result)
+    } else if (operValues.length < 2) {
       currentResult = result
     } else {
       currentResult =
@@ -218,9 +265,9 @@ for (const operBinaryButton of operBinaryButtons) {
     sign = e.target.value
     solve = false
 
-    writeResult(e.target.value)
-    writeCurrentResult(currentResult)
-    writeFormula(e.target.value) // repeating end
+    addToResult(e.target.value)
+    rewriteCurrentResult(currentResult)
+    addToFormula(e.target.value)
   }
 }
 
@@ -281,12 +328,12 @@ for (const saveMemButton of saveMemButtons) {
       currentResult =
       solveBinary(currentResult, sign, operValues[operValues.length - 1])
       sign = '='
-      writeCurrentResult('')
+      rewriteCurrentResult('')
       clearResult()
-      writeResult(currentResult)
+      addToResult(currentResult)
       if (document.getElementById('display_formula').value !== '' &&
       solve === false) {
-        writeFormula('=' + currentResult)
+        addToFormula('=' + currentResult)
       }
       clearOperValues()
       solve = true
