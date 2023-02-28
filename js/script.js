@@ -36,6 +36,12 @@ const rewriteFormula = (newNumberChar) => {
   formula.value = newNumberChar
 }
 
+const addToAll = (newNumberChar) => {
+  addToCurrentResult(newNumberChar)
+  addToResult(newNumberChar)
+  addToFormula(newNumberChar)
+}
+
 const addOperValue = (newOperValue) => {
   operValues.push(newOperValue)
 }
@@ -96,21 +102,25 @@ const delLastChar = (str) => {
 }
 
 const findOperChar = (str) => {
-  if (str.indexOf('×') > -1 || // simplify!
-  str.indexOf('÷') > -1 ||
-  str.indexOf('+') > -1 ||
-  str.indexOf('-') > -1) {
+  if (str.includes('×') || // simplify!
+  str.includes('÷') ||
+  str.includes('+') ||
+  str.includes('-')) {
     return true
-  } else {
-    return false
   }
+  return false
 }
+
 const changeSign = (num) => {
   if (Math.sign(Number(num)) === 1) {
     return -Math.abs(num)
   } else {
     return Math.abs(num)
   }
+}
+
+const percentage = (num, per) => {
+  return (Number(num) / 100) * Number(per)
 }
 
 const solveBinary = (x, oper, y) => {
@@ -146,13 +156,23 @@ const solveUnary = (x, oper) => {
     addToResult(currentResult)
     break
   case '+/-':
+    x = changeSign(result)
+
+    if (solve) {
+      rewriteCurrentResult(x)
+      rewriteResult(x)
+      addToFormula('; ' + x)
+      result = x
+      currentResult = x
+      return
+    }
+
     if (result !== '') {
-      x = changeSign(result)
       result = x
       currentResult = x
       rewriteCurrentResult(x)
       rewriteResult(x)
-      clearFormula()
+      delLastChar(formula.value.toString())
       addToFormula(x)
     }
   }
@@ -179,17 +199,25 @@ document.getElementById('button_resetMemory').onclick = () => {
 }
 
 document.getElementById('button_showMemory').onclick = () => {
-  if (document.getElementById('display_formula').value !== '') {
+  if (document.getElementById('display_formula').value !== '' &&
+  sign === '') {
     currentResult = memVal.value
     result = memVal.value
-    addToFormula(';' + ' ' + memVal.value)
+    addToFormula(';' + ' ')
+  } else if (solve) {
+    currentResult = memVal.value
+    result = memVal.value
+    addToFormula(';' + ' ')
+  } else {
+    result = memVal.value
   }
-  rewriteCurrentResult(memVal.value)
-  rewriteResult(memVal.value)
+  rewriteCurrentResult(currentResult)
+  rewriteResult(result)
+  addToFormula(memVal.value)
 }
 
 document.getElementById('button_solve').onclick = () => {
-  if (sign !== '=' && currentResult !== '') {
+  if (sign !== '=' && sign !== 'MU' && sign !== '%' && currentResult !== '') {
     addOperValue(result)
     currentResult =
     solveBinary(currentResult, sign, operValues[operValues.length - 1])
@@ -197,8 +225,7 @@ document.getElementById('button_solve').onclick = () => {
     rewriteCurrentResult('')
     clearResult()
     addToResult(currentResult)
-    if (document.getElementById('display_formula').value !== '' &&
-    solve === false) {
+    if (formula.value !== '' && !solve) {
       addToFormula('=' + currentResult)
     }
     clearOperValues()
@@ -210,39 +237,56 @@ document.getElementById('button_solve').onclick = () => {
 const buttonNumbers = document.getElementsByClassName('button_number')
 for (const buttonNum of buttonNumbers) {
   buttonNum.onclick = (e) => {
-    if ((e.target.value !== '00' || e.target.value !== '0' ||
-    e.target.value !== '.') && result !== '') {
+    // console.clear()
+    if ((e.target.value !== '00' || e.target.value !== '0') && result !== '') {
+      // console.log('main if');
       if (solve && (sign === '=' || sign === '√')) {
+        // console.log('1 if 1');
         clearResult()
         clearOperValues()
         clearCurrentResult()
+        addToFormula('; ')
+
+        if (e.target.value === '.') {
+          // console.log('2 if 1');
+          addToAll('0')
+        }
+        addToFormula(e.target.value)
         addToResult(e.target.value)
-        addToFormula('; ' + e.target.value)
         sign = '' // necessary?
       } else {
-        if (findOperChar(result)) {
+        // console.log('1 else');
+        if (findOperChar(result.toString())) {
+          // console.log('2 if 2');
           clearResult()
+        }
+
+        if (e.target.value === '.' && result === '') {
+          // console.log('2 if 3');
+          addToResult('0')
+          addToFormula('0')
         }
         addToResult(e.target.value)
         addToFormula(e.target.value)
       }
+
       if (document.getElementById('display_formula').value === '' &&
       sign === '=' && result === '') {
+        // console.log('1 if 2');
         clearFormula()
       }
+
       if (currentResult === '') {
+        // console.log('1 if 3');
         addToCurrentResult(e.target.value)
       }
-    } else if (e.target.value !== '00' && e.target.value !== '0' &&
-    result === '') {
-      if (e.target.value === '.') { // дописать условие чтобы перед точкой вписывался 0
-        addToCurrentResult('0')
-        addToResult('0')
-        addToFormula('0')
+    } else if (e.target.value !== '00' && e.target.value !== '0') {
+      // console.log('main else if');
+      if (e.target.value === '.') {
+        // console.log('1 if 4');
+        addToAll('0')
       }
-      addToCurrentResult(e.target.value)
-      addToResult(e.target.value)
-      addToFormula(e.target.value)
+      addToAll(e.target.value)
     }
   }
 }
@@ -252,14 +296,13 @@ for (const operBinaryButton of operBinaryButtons) {
   operBinaryButton.onclick = (e) => {
     addOperValue(result)
 
-    if (findOperChar(result) &&
-    sign !== '=') {
+    if (findOperChar(result.toString()) && sign !== '=') {
       result = delLastChar(result)
-    } else if (operValues.length < 2) {
+    } else if (operValues.length < 2 || sign === 'MU') {
       currentResult = result
     } else {
       currentResult =
-      solveBinary(currentResult, sign, operValues[operValues.length - 1])
+        solveBinary(currentResult, sign, operValues[operValues.length - 1])
     }
 
     sign = e.target.value
@@ -277,6 +320,56 @@ for (const operUnaryButton of operUnaryButtons) {
     if (result !== '') {
       solveUnary(currentResult, e.target.value)
     }
+  }
+}
+
+document.getElementById('button_percent').onclick = () => {
+  if (sign !== '') {
+    let percent = percentage(currentResult, result)
+    if (sign === '×' || sign === '÷') {
+      percent = result / 100
+    }
+    currentResult =
+      solveBinary(currentResult, sign, percent)
+    result = currentResult
+
+    sign = '%'
+
+    clearOperValues()
+    clearCurrentResultText()
+    rewriteResult(currentResult)
+    addToFormula('%=' + currentResult)
+  }
+}
+
+document.getElementById('button_markUp').onclick = () => {
+  if (operValues > 1) {
+    let percent = percentage(currentResult, 100 - result)
+    switch (sign) {
+    case '÷':
+      currentResult =
+        solveBinary(currentResult, sign, percent) * currentResult
+      break
+    case '×':
+      percent = percentage(currentResult, result)
+      currentResult =
+        solveBinary(currentResult, '+', percent)
+      break
+    case '+':
+      currentResult =
+        100 * (Number(currentResult) + Number(result)) / Number(result)
+      break
+    case '-':
+      currentResult =
+        100 * (Number(currentResult) - Number(result)) / Number(result)
+      break
+    }
+    result = currentResult
+    sign = 'MU'
+    clearOperValues()
+    clearCurrentResultText()
+    rewriteResult(currentResult)
+    addToFormula('MU=' + currentResult)
   }
 }
 
