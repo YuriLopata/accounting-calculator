@@ -3,46 +3,45 @@
 let currentResult = ''
 let result = ''
 let sign = ''
+let signChanged = false
 let solve = false
+let isDelLastChar = false
 const formula = document.getElementById('display_formula')
 let operValues = []
 const operChars = ['+', '-', '×', '÷']
+
+const changeDecNumBtn = document.getElementById('numberOfDecimals')
 
 let mems = ['', '', '']
 const memBtn = document.querySelector('#middleBar_memButton')
 const memVal = document.querySelector('#middleBar_memValue')
 
-const addToCurrentResult = (newNumberChar) => {
-  document.getElementById('upperBar_currentResult').value += newNumberChar
-}
-
 const rewriteCurrentResult = (newNumberChar) => {
   document.getElementById('upperBar_currentResult').value = newNumberChar
+}
+const rewriteResult = (num) => {
+  document.getElementById('middleBar_result').value = num
+}
+
+const addToCurrentResult = (newNumberChar) => {
+  document.getElementById('upperBar_currentResult').value += newNumberChar
 }
 
 const addToResult = (newNumberChar) => {
   result += newNumberChar
   document.getElementById('middleBar_result').value = result
 }
-
-const rewriteResult = (num) => {
-  document.getElementById('middleBar_result').value = num
-}
-
 const addToFormula = (newNumberChar) => {
   document.getElementById('display_formula').value += newNumberChar
 }
-
 const rewriteFormula = (newNumberChar) => {
   formula.value = newNumberChar
 }
-
 const addToAll = (newNumberChar) => {
   addToCurrentResult(newNumberChar)
   addToResult(newNumberChar)
   addToFormula(newNumberChar)
 }
-
 const addOperValue = (newOperValue) => {
   operValues.push(newOperValue)
 }
@@ -50,7 +49,6 @@ const addOperValue = (newOperValue) => {
 const clearOperValues = () => {
   operValues = []
 }
-
 const clearResultValue = () => {
   result = ''
 }
@@ -61,11 +59,9 @@ const clearResult = () => {
   clearResultValue()
   clearResultText()
 }
-
 const clearFormula = () => {
   document.getElementById('display_formula').value = ''
 }
-
 const clearCurrentResultValue = () => {
   currentResult = ''
 }
@@ -84,6 +80,7 @@ const clearCalc = () => {
   clearOperValues()
   solve = false
   sign = ''
+  signChanged = false
 }
 
 const clearMemory = () => {
@@ -91,22 +88,71 @@ const clearMemory = () => {
   memVal.value = ''
 }
 
+const isSolveFirst = () => {
+  if (formula.value.includes('=')) {
+    return false
+  }
+  return true
+}
+
 const delLastChar = (str) => {
   str = str.toString()
   const strShorted = str.slice(0, str.length - 1)
+  return strShorted
+}
+
+const addShortedRes = (strShorted) => {
   const formulaShorted = formula.value.slice(0, formula.value.length - 1)
-  if (result !== '' && formula.value !== '') {
+
+  if (result !== '' && formula.value !== '' && !solve) {
+    console.log(2);
     rewriteCurrentResult(strShorted)
     rewriteResult(strShorted)
     rewriteFormula(formulaShorted)
   }
-  return strShorted
+
+  if (result !== '' && formula.value !== '' && solve) {
+    console.log(3);
+    rewriteResult(strShorted)
+
+    if (!isLastChar(formula.value, ' ') && !isDelLastChar) {
+      console.log('add ;');
+      addToFormula('; ' + strShorted)
+    }
+
+    if (!isLastChar(formula.value, ' ') && isDelLastChar) {
+      console.log('dont add ;');
+      formula.value = delLastChar(formula.value)
+      // addToFormula('; ' + strShorted)
+    }
+  }
+
+  if (result.length === 0 && formula.value.length === 1) {
+    console.log(4);
+    clearCalc()
+  }
+
+  if (result.length === 0 && formula.value.length > 0 &&
+  !isLastChar(formula.value, ';')) {
+    console.log(5);
+    clearResult()
+    formula.value = delLastChar(formula.value)
+  }
 }
 
 const delSeveralLastChars = (str, charNum) => {
   str = str.toString()
   const strShorted = str.slice(0, str.length - charNum)
   return strShorted
+}
+
+const isLastChar = (str, char) => {
+  str = str.toString()
+  const strLastChar = str.slice(str.length - 1)
+  if (strLastChar.includes(char)) {
+    return true
+  }
+  return false
 }
 
 const isLastCharOper = (str) => {
@@ -130,6 +176,48 @@ const percentage = (num, per) => {
   return (Number(num) / 100) * Number(per)
 }
 
+const changeDecResult = () => {
+  const initResult = Number(result)
+  switch (changeDecNumBtn.innerHTML.trim()) {
+  case 'F:<br>initial':
+    return initResult
+  case 'F:<br>0':
+    return initResult.toFixed(0)
+  case 'F:<br>1':
+    return initResult.toFixed(1)
+  case 'F:<br>2':
+    return initResult.toFixed(2)
+  case 'F:<br>3':
+    return initResult.toFixed(3)
+  case 'F:<br>4':
+    return initResult.toFixed(4)
+  }
+}
+
+const changeDecNum = () => {
+  switch (changeDecNumBtn.innerHTML.trim()) {
+  case 'F:<br>initial':
+    changeDecNumBtn.innerHTML = 'F:<br>0'
+    break
+  case 'F:<br>0':
+    changeDecNumBtn.innerHTML = 'F:<br>1'
+    break
+  case 'F:<br>1':
+    changeDecNumBtn.innerHTML = 'F:<br>2'
+    break
+  case 'F:<br>2':
+    changeDecNumBtn.innerHTML = 'F:<br>3'
+    break
+  case 'F:<br>3':
+    changeDecNumBtn.innerHTML = 'F:<br>4'
+    break
+  case 'F:<br>4':
+    changeDecNumBtn.innerHTML = 'F:<br>initial'
+    break
+  }
+  result = changeDecResult()
+}
+
 const solveBinary = (x, oper, y) => {
   switch (oper) {
   case '+':
@@ -144,7 +232,7 @@ const solveBinary = (x, oper, y) => {
 }
 
 const solveUnary = (x, oper) => {
-  let initialResult
+  let prevResult
   switch (oper) {
   case '√':
     if (sign === '=') {
@@ -162,44 +250,83 @@ const solveUnary = (x, oper) => {
     sign = '√'
     solve = true // necessary?
     addToResult(currentResult)
+    signChanged = true
     break
   case '+/-':
     console.clear('');
-    initialResult = result
+    prevResult = result.toString()
 
     if (isLastCharOper(result)) {
       result = delLastChar(result)
+      addShortedRes(result)
     }
 
     x = changeSign(result)
     result = x
 
-    if (operValues.length < 1 && sign === '' && !solve) {
+    if (sign === '' && !solve && currentResult === '') {
       console.log(1);
       rewriteCurrentResult(x)
       rewriteResult(x)
       rewriteFormula(x)
     }
 
-    if (operValues.length < 2 && sign !== '' &&
-    isLastCharOper(initialResult) && !solve) {
+    if (sign !== '' && !solve && isLastCharOper(prevResult)) {
       console.log(2);
       currentResult = x // maybe shit
       operValues[0] = result
       rewriteCurrentResult(x)
       rewriteResult(x + sign)
-      formula.value = delSeveralLastChars(formula.value, result.length)
+
+      console.log('isSolveFirst ' + isSolveFirst());
+      if (isSolveFirst()) {
+        console.log('if 1');
+        formula.value = delSeveralLastChars(formula.value, result.length)
+      }
+
+      if (!isSolveFirst()) {
+        console.log('if 2');
+        delLastChar(formula.value)
+        addShortedRes(result)
+        formula.value = delSeveralLastChars(formula.value, result.toString().length)
+      }
+
       addToFormula(result + sign)
       result += sign
     }
 
-    if (operValues.length < 2 && operChars.includes(sign) &&
-    !isLastCharOper(initialResult) && !solve) {
+    if (operChars.includes(sign) && currentResult !== '' && !solve &&
+    !isLastCharOper(prevResult) && prevResult > 0) {
       console.log(3);
       rewriteResult(x)
-      formula.value = delSeveralLastChars(formula.value, initialResult.length)
+      formula.value = delSeveralLastChars(formula.value, prevResult.length)
       addToFormula('(' + result + ')')
     }
+
+    if (operChars.includes(sign) && currentResult !== '' &&
+    !isLastCharOper(prevResult) && !solve && prevResult < 0) {
+      console.log(4);
+      rewriteResult(x)
+      formula.value = delSeveralLastChars(formula.value, prevResult.length + 2)
+      addToFormula(result)
+    }
+
+    if (!operChars.includes(sign) && !signChanged &&
+    !isLastCharOper(prevResult) && solve) {
+      console.log(5);
+      rewriteResult(x)
+      addToFormula('; ' + result)
+    }
+
+    if (!operChars.includes(sign) && signChanged &&
+    !isLastCharOper(prevResult) && solve) {
+      console.log(6);
+      rewriteResult(x)
+      formula.value = delSeveralLastChars(formula.value, prevResult.length)
+      addToFormula(result)
+    }
+    signChanged = true
+    break
   }
 }
 
@@ -214,6 +341,8 @@ document.getElementById('button_resetAll').onclick = () => {
 
 document.getElementById('button_delLastChar').onclick = () => {
   result = delLastChar(result)
+  addShortedRes(result)
+  isDelLastChar = true
   if (addOperValue.length === 1) {
     clearOperValues()
   }
@@ -236,12 +365,20 @@ document.getElementById('button_showMemory').onclick = () => {
   } else {
     result = memVal.value
   }
+  signChanged = false
+  isDelLastChar = false
   rewriteCurrentResult(currentResult)
   rewriteResult(result)
   addToFormula(memVal.value)
 }
 
 document.getElementById('button_solve').onclick = () => {
+  if (isLastCharOper(result)) {
+    clearResult()
+    addToResult(currentResult)
+    addToFormula(currentResult)
+  }
+
   if (sign !== '=' && sign !== 'MU' && sign !== '%' && currentResult !== '') {
     addOperValue(result)
     currentResult =
@@ -255,7 +392,9 @@ document.getElementById('button_solve').onclick = () => {
     }
     clearOperValues()
     solve = true
-    rewriteResult(currentResult)
+    signChanged = false
+    isDelLastChar = false
+    rewriteResult(changeDecResult())
   }
 }
 
@@ -263,9 +402,14 @@ const buttonNumbers = document.getElementsByClassName('button_number')
 for (const buttonNum of buttonNumbers) {
   buttonNum.onclick = (e) => {
     console.clear()
-    if ((e.target.value !== '00' || e.target.value !== '0') && result !== '') {
+
+    if (isLastChar(formula.value, ';')) {
+      addToFormula(' ')
+    }
+
+    if ((e.target.value !== '00' || e.target.value !== '0') && (result !== '' || solve)) {
       console.log('main if');
-      if (solve && (sign === '=' || sign === '√')) {
+      if (solve && !isDelLastChar && (sign === '=' || sign === '√')) {
         console.log('1 if 1');
         clearResult()
         clearOperValues()
@@ -313,6 +457,7 @@ for (const buttonNum of buttonNumbers) {
       }
       addToAll(e.target.value)
     }
+    signChanged = false
   }
 }
 
@@ -323,9 +468,10 @@ for (const operBinaryButton of operBinaryButtons) {
     if (result !== '') {
       console.log('main if');
       addOperValue(result)
-      if (isLastCharOper(result) && sign !== '=') {
+      if (isLastCharOper(result) && sign !== '=' && result !== '-') {
         console.log('if');
         result = delLastChar(result)
+        addShortedRes(result)
       } else if (operValues.length < 2 || sign === 'MU') {
         console.log('else if');
         currentResult = result
@@ -343,6 +489,8 @@ for (const operBinaryButton of operBinaryButtons) {
     }
 
     solve = false
+    signChanged = false
+    isDelLastChar = false
 
     if (e.target.value === '-' && !isLastCharOper(result)) {
       addToAll(e.target.value)
@@ -370,6 +518,8 @@ document.getElementById('button_percent').onclick = () => {
     result = currentResult
 
     sign = '%'
+    signChanged = false
+    isDelLastChar = false
 
     clearOperValues()
     clearCurrentResultText()
@@ -402,12 +552,16 @@ document.getElementById('button_markUp').onclick = () => {
     }
     result = currentResult
     sign = 'MU'
+    signChanged = false
+    isDelLastChar = false
     clearOperValues()
     clearCurrentResultText()
     rewriteResult(currentResult)
     addToFormula('MU=' + currentResult)
   }
 }
+
+changeDecNumBtn.addEventListener('click', changeDecNum)
 
 // MEMORY START
 
