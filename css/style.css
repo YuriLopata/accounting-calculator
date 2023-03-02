@@ -1,3 +1,7 @@
+button {
+    user-select: none;
+}
+
 body {
     background: #353535;
     color: #fff;
@@ -30,6 +34,8 @@ body {
 }
 
 #numberOfDecimals {
+    width: 33px;
+    height: 28px;
     background-color: #e4e4e4;
     color: #000;
     text-align: left;
@@ -39,6 +45,14 @@ body {
     margin-right: 10px;
     border: none;
     border-radius: 4px;
+    transition: all ease 0.1s;
+}
+
+#numberOfDecimals:focus, #upperBar_currentResult:focus,
+#middleBar_memButton:focus, #middleBar_memValue:focus, #middleBar_result:focus,
+#display_formula:focus {
+    background-color: rgb(180, 180, 180);
+    border-radius: 4px;
 }
 
 #upperBar_currentResult {
@@ -47,6 +61,7 @@ body {
     color: #000;
     text-align: right;
     border: none;
+    transition: all ease 0.1s;
 }
 
 .middleBar {
@@ -75,6 +90,8 @@ body {
     line-height: 22px;
     padding: 0;
     border: none;
+    border-radius: 4px;
+    transition: all ease 0.1s;
 }
 
 #middleBar_memValue {
@@ -90,6 +107,7 @@ body {
     font-size: 48px;
     line-height: 48px;
     text-align: right;
+    transition: all ease 0.1s;
 }
 
 #display_formula {
@@ -102,6 +120,7 @@ body {
     text-align: right;
     padding: 6px;
     border-radius: 5px;
+    transition: all ease 0.1s;
 }
 
 .buttons {
