@@ -59,3 +59,6 @@
 //       addToFormula(result)
 //     }
 //     signChanged = true
+
+// const a = 245.670000000
+// console.log(parseFloat(a));

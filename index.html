@@ -20,31 +20,35 @@
         <!-- Display start -->
         <div class="display">
             <div class="display_upperBar upperBar">
-                <button id="numberOfDecimals" title="Decimal places"
-                value = "initial">
-                    F:<br>initial
-                </button>
+                <div class="upperBar_mem">
+                    <button id="upperBar_memButton" value="0">
+                        M1:
+                    </button>
+
+                    <input type="text" id="upperBar_memValue"
+                    placeholder="0" value="" readonly>
+                </div>
 
                 <input type="text" id="upperBar_currentResult"
                 placeholder="Current result" value="" readonly>
             </div>
 
             <div class="display_middleBar middleBar">
-                <div class="middleBar_mem">
-                    <button id="middleBar_memButton" value="0">
-                        M1:
-                    </button>
-
-                    <input type="text" id="middleBar_memValue"
-                    placeholder="0" value="" readonly>
-                </div>
+                <button id="numberOfDecimals" title="Decimal places"
+                value = "initial">
+                    F:<br>initial
+                </button>
                 
                 <input type="text" id="middleBar_result"
                 readonly placeholder="0" value="">
             </div>
 
-            <input type="text" id="display_formula"
-            readonly placeholder="Entire formula" value="">
+            <div class="display_downBar downBar">
+                <p class="downBar_ellipsis">...</p>
+
+                <input type="text" id="display_formula" 
+                readonly placeholder="Entire formula" value="">
+            </div>
         </div>
         <!-- Display end -->
 
