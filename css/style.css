@@ -33,30 +33,53 @@ body {
     border-radius: 4px;
 }
 
-#numberOfDecimals {
-    width: 33px;
-    height: 28px;
+.upperBar_mem {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    /* align-items: center; */
+    justify-content: space-between;
+    margin-right: 5px;
+    border-radius: 5px;
+}
+
+#upperBar_memButton, #upperBar_memValue {
+    align-content: flex-start;
     background-color: #e4e4e4;
     color: #000;
-    text-align: left;
-    font-size: 14px;
-    line-height: 14px;
+    font-size: 20px;
+    line-height: 20px;
     padding: 0;
-    margin-right: 10px;
     border: none;
     border-radius: 4px;
     transition: all ease 0.1s;
 }
 
-#numberOfDecimals:focus, #upperBar_currentResult:focus,
-#middleBar_memButton:focus, #middleBar_memValue:focus, #middleBar_result:focus,
+#upperBar_memButton {
+    padding: 3px;
+    margin-right: 5px;
+    background: rgb(180, 180, 180);
+}
+
+#upperBar_memValue {
+    width: 90%;
+    justify-content: end;
+}
+
+#upperBar_currentResult:focus, #upperBar_memButton:focus,
+#upperBar_memValue:focus, #middleBar_result:focus,
 #display_formula:focus {
     background-color: rgb(180, 180, 180);
     border-radius: 4px;
+    /* border: 2px #000 solid; */
+}
+
+#upperBar_memButton:focus, #numberOfDecimals:focus {
+    border: #000 1px solid;
 }
 
 #upperBar_currentResult {
-    max-width: 70%; /* temporarily */
+    max-width: 52%;
     background-color: #e4e4e4;
     color: #000;
     text-align: right;
@@ -67,7 +90,7 @@ body {
 .middleBar {
     height: 60px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     background-color: #e4e4e4;
     border-radius: 5px;
@@ -75,31 +98,24 @@ body {
     margin-bottom: 6px;
 }
 
-.middleBar_mem {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: space-between;
-}
-
-#middleBar_memButton, #middleBar_memValue {
-    align-content: center;
+#numberOfDecimals {
+    width: 40px;
+    height: 30px;
     background-color: #e4e4e4;
     color: #000;
-    font-size: 22px;
-    line-height: 22px;
-    padding: 0;
+    text-align: left;
+    font-size: 12px;
+    line-height: 12px;
+    padding: 2px;
+    margin-right: 5px;
     border: none;
     border-radius: 4px;
+    background: rgb(180, 180, 180);
     transition: all ease 0.1s;
 }
 
-#middleBar_memValue {
-    width: 30px;
-}
-
 #middleBar_result {
-    width: 60%;
+    width: 110%;
     height: 48px;
     background-color: #e4e4e4;
     color: #000;
@@ -110,16 +126,38 @@ body {
     transition: all ease 0.1s;
 }
 
-#display_formula {
+.display_downBar {
     width: 100%;
     height: 40px;
+    position: relative;
+    background-color: #e4e4e4;
+    border: none;
+    border-radius: 5px;
+}
+
+.downBar_ellipsis {
+    display: none;
+    z-index: 1;
+    position: absolute;
+    bottom: 7px;
+    left: 4px;
+    font-size: 22px;
+    color: #000;
+    user-select: none;
+}
+
+#display_formula {
+    width: 100%;
+    height: 100%;
+    margin-left: auto;
     background-color: #e4e4e4;
     color: #000;
     border: none;
     font-size: 22px;
-    text-align: right;
     padding: 6px;
     border-radius: 5px;
+    direction: rtl;
+    unicode-bidi: bidi-override;
     transition: all ease 0.1s;
 }
 
@@ -180,3 +218,18 @@ body {
 #button_solve:active {
     background-color: #008761;
 }
+
+input::selection {
+    background: #525252;
+}
+
+.text-container {
+    position: relative;
+    overflow-x: hidden;
+  }
+  
+  .text {
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+  }
