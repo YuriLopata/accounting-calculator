@@ -44,7 +44,7 @@
             </div>
 
             <div class="display_downBar downBar">
-                <p class="downBar_ellipsis">...</p>
+                <!-- <p class="downBar_ellipsis">...</p> -->
 
                 <input type="text" id="display_formula" 
                 readonly placeholder="Entire formula" value="">
@@ -54,32 +54,32 @@
 
         <!-- Buttons start -->
         <div class="buttons">
-            <button class="button" id="button_resetMemory"
+            <button class="button button_resetMemory"
             title="Reset memory">
                 MC
             </button>
             
-            <button class="button" id="button_showMemory"
+            <button class="button button_showMemory"
             title="Show memory on display">
                 MR
             </button>
             
-            <button class="button button_save" id="button_saveNegative"
-            value="-" title="Save negative value in the memory">
+            <button class="button button_save"
+            value="M-" title="Save negative value in the memory">
                 M-
             </button>
             
-            <button class="button button_save" id="button_savePositive"
-            value="+" title="Save positive value in the memory">
+            <button class="button button_save"
+            value="M+" title="Save positive value in the memory">
                 M+
             </button>
             
-            <button class="button" id="button_markUp"
+            <button class="button button_markUp"
             title="Margin (Markup)">
                 MU
             </button>
             
-            <button class="button button_operUnary" id="button_percent"
+            <button class="button button_percent"
             title="Interest calculation">
                 %
             </button>
@@ -102,7 +102,7 @@
             </button>
             
             <button class="button button_operBinary" id="button_devide"
-            value="÷">
+            value="/">
                 ÷
             </button>
             
@@ -111,7 +111,7 @@
                 √
             </button>
             
-            <button class="button" id="button_delLastChar"
+            <button class="button button_delLastChar" value="Backspace"
             title="Delete the last character">
                 DEL
             </button>
@@ -129,7 +129,7 @@
             </button>
             
             <button class="button button_operBinary" id="button_multiply"
-            value="×">
+            value="*">
                 ×
             </button>
             
@@ -138,7 +138,7 @@
                 -
             </button>
             
-            <button class="button" id="button_resetAll"
+            <button class="button button_resetAll" value="Escape"
             title="Reset calculator and memory">
                 AC
             </button>
@@ -160,11 +160,11 @@
                 +
             </button>
 
-            <button class="button" id="button_solve">
+            <button class="button button_solve" value="Enter">
                 =
             </button>
             
-            <button class="button" id="button_resetCalc"
+            <button class="button button_resetCalc" value="Delete"
             title="Reset calculator">
                 C
             </button>

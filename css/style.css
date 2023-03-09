@@ -78,6 +78,11 @@ body {
     border: #000 1px solid;
 }
 
+#upperBar_memButton:active, #numberOfDecimals:active {
+    background: rgb(150, 150, 150);
+    /* border: #000 1px solid; */
+}
+
 #upperBar_currentResult {
     max-width: 52%;
     background-color: #e4e4e4;
@@ -127,35 +132,36 @@ body {
 }
 
 .display_downBar {
+    display: flex;
     width: 100%;
     height: 40px;
-    position: relative;
+    /* position: relative; */
     background-color: #e4e4e4;
     border: none;
     border-radius: 5px;
 }
 
-.downBar_ellipsis {
+/* .downBar_ellipsis {
     display: none;
     z-index: 1;
-    position: absolute;
     bottom: 7px;
     left: 4px;
     font-size: 22px;
     color: #000;
+    margin-top: auto;
     user-select: none;
-}
+} */
 
 #display_formula {
     width: 100%;
     height: 100%;
-    margin-left: auto;
     background-color: #e4e4e4;
     color: #000;
     border: none;
     font-size: 22px;
-    padding: 6px;
     border-radius: 5px;
+    padding: 6px;
+    text-overflow: ellipsis;
     direction: rtl;
     unicode-bidi: bidi-override;
     transition: all ease 0.1s;
@@ -193,34 +199,34 @@ body {
     background-color: rgb(150, 150, 150);
 }
 
-#button_sum, #button_solve {
+#button_sum, .button_solve {
     grid-row: span 2;
 }
 
-#button_resetAll, #button_resetCalc {
+.button_resetAll, .button_resetCalc {
     background-color: #c90c32 /* #BF3030 */; /* https://colorscheme.ru/#3931Tw0w0w0w0 */
 }
 
-#button_resetAll:active, #button_resetCalc:active {
+.button_resetAll:active, .button_resetCalc:active {
     background-color: #a70b2a;
 }
 
-#button_sum, #button_solve {
+#button_sum, .button_solve {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-#button_solve {
+.button_solve {
     background-color: #00A779 /* #269926 */; /* https://colorscheme.ru/#3931Tw0w0w0w0 */
 }
 
-#button_solve:active {
+.button_solve:active {
     background-color: #008761;
 }
 
 input::selection {
-    background: #525252;
+    background: #818181;
 }
 
 .text-container {
