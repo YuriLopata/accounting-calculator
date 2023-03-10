@@ -12,19 +12,18 @@ body {
 }
 
 .workspace {
-    max-height: 700px;
-    max-width: 410px;
+    width: 500px;
     margin: 0 auto;
-    padding: 10px;
+    padding: 6px;
 }
 
 .display {
+    height: 30%;
     margin-bottom: 6px;
 }
 
 .upperBar {
     display: flex;
-    height: 40px;
     justify-content: space-between;
     align-items: center;
     background-color: #e4e4e4;
@@ -37,63 +36,27 @@ body {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    /* align-items: center; */
     justify-content: space-between;
     margin-right: 5px;
     border-radius: 5px;
 }
 
-#upperBar_memButton, #upperBar_memValue {
-    align-content: flex-start;
-    background-color: #e4e4e4;
-    color: #000;
-    font-size: 20px;
-    line-height: 20px;
-    padding: 0;
-    border: none;
-    border-radius: 4px;
-    transition: all ease 0.1s;
-}
-
-#upperBar_memButton {
-    padding: 3px;
-    margin-right: 5px;
-    background: rgb(180, 180, 180);
-}
-
 #upperBar_memValue {
-    width: 90%;
+    width: 100%;
     justify-content: end;
 }
 
-#upperBar_currentResult:focus, #upperBar_memButton:focus,
-#upperBar_memValue:focus, #middleBar_result:focus,
-#display_formula:focus {
-    background-color: rgb(180, 180, 180);
-    border-radius: 4px;
-    /* border: 2px #000 solid; */
-}
-
-#upperBar_memButton:focus, #numberOfDecimals:focus {
-    border: #000 1px solid;
-}
-
-#upperBar_memButton:active, #numberOfDecimals:active {
-    background: rgb(150, 150, 150);
-    /* border: #000 1px solid; */
-}
-
 #upperBar_currentResult {
-    max-width: 52%;
+    max-width: 50%;
     background-color: #e4e4e4;
     color: #000;
     text-align: right;
     border: none;
+    padding: 1px;
     transition: all ease 0.1s;
 }
 
 .middleBar {
-    height: 60px;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -103,7 +66,98 @@ body {
     margin-bottom: 6px;
 }
 
-#numberOfDecimals {
+#middleBar_result {
+    width: 100%;
+    background-color: #e4e4e4;
+    color: #000;
+    border: none;
+    font-size: 46px;
+    line-height: 46px;
+    text-align: right;
+    transition: all ease 0.1s;
+}
+
+.downBar {
+    display: flex;
+    width: 100%;
+    background-color: #e4e4e4;
+    border: none;
+    border-radius: 5px;
+    padding: 6px;
+}
+
+#downBar_formula {
+    width: 100%;
+    background-color: #e4e4e4;
+    color: #000;
+    border: none;
+    font-size: 22px;
+    border-radius: 5px;
+    padding: 5px 1px;
+    text-overflow: ellipsis;
+    direction: rtl;
+    unicode-bidi: bidi-override;
+    transition: all ease 0.1s;
+}
+
+.buttons {
+    height: 400px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: 6px;
+}
+
+.button {
+    text-align: center;
+    background-color: rgb(110, 110, 110);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: auto 0;
+    transition: all ease 0.1s;
+}
+
+.button:hover, .button:focus {
+    cursor: pointer;
+    border: solid 2px white;
+    transform: scale(1.02);
+}
+
+.button:active {
+    background-color: rgb(90, 90, 90);
+    transform: translateX(2px);
+    transform: translateY(2px);
+}
+
+.button_number {
+    background-color: rgb(150, 150, 150);
+}
+
+.button_number:active {
+    background-color: rgb(120, 120, 120);
+}
+
+.upperBar_memButton, #upperBar_memValue {
+    align-content: flex-start;
+    background-color: #e4e4e4;
+    color: #000;
+    font-size: 20px;
+    line-height: 20px;
+    padding: 6px 1px;
+    border: none;
+    border-radius: 4px;
+    transition: all ease 0.1s;
+}
+
+.upperBar_memButton {
+    padding: 3px;
+    margin-right: 5px;
+    background: rgb(180, 180, 180);
+    transition: all ease 0.1s;
+}
+
+.button_numberOfDecimals {
     width: 40px;
     height: 30px;
     background-color: #e4e4e4;
@@ -119,84 +173,25 @@ body {
     transition: all ease 0.1s;
 }
 
-#middleBar_result {
-    width: 110%;
-    height: 48px;
-    background-color: #e4e4e4;
-    color: #000;
-    border: none;
-    font-size: 48px;
-    line-height: 48px;
-    text-align: right;
-    transition: all ease 0.1s;
-}
-
-.display_downBar {
-    display: flex;
-    width: 100%;
-    height: 40px;
-    /* position: relative; */
-    background-color: #e4e4e4;
-    border: none;
-    border-radius: 5px;
-}
-
-/* .downBar_ellipsis {
-    display: none;
-    z-index: 1;
-    bottom: 7px;
-    left: 4px;
-    font-size: 22px;
-    color: #000;
-    margin-top: auto;
-    user-select: none;
-} */
-
-#display_formula {
-    width: 100%;
-    height: 100%;
-    background-color: #e4e4e4;
-    color: #000;
-    border: none;
-    font-size: 22px;
-    border-radius: 5px;
-    padding: 6px;
-    text-overflow: ellipsis;
-    direction: rtl;
-    unicode-bidi: bidi-override;
-    transition: all ease 0.1s;
-}
-
-.buttons {
-    display: grid;
-    grid-template-columns: repeat(6, 60px);
-    grid-template-rows: repeat(5, 60px);
-    gap: 6px;
-}
-
-.button {
-    text-align: center;
-    background-color: rgb(110, 110, 110);
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    transition: all ease 0.1s;
-}
-
-.button:hover, .button:focus {
-    cursor: pointer;
-    border: solid 2px white;
-    transform: scale(1.02);
-}
-
-.button:active {
+#upperBar_currentResult:focus, .upperBar_memButton:focus,
+#upperBar_memValue:focus, #middleBar_result:focus,
+#downBar_formula:focus {
     background-color: rgb(180, 180, 180);
-    transform: translateX(2px);
-    transform: translateY(2px);
+    border-radius: 4px;
 }
 
-.button_number {
-    background-color: rgb(150, 150, 150);
+.upperBar_memButton:hover, .button_numberOfDecimals:hover {
+    border: none;
+    transform: none;
+}
+
+.upperBar_memButton:focus, .button_numberOfDecimals:focus {
+    border: #000 1px solid;
+    transform: none;
+}
+
+.upperBar_memButton:active, .button_numberOfDecimals:active {
+    background: rgb(150, 150, 150);
 }
 
 #button_sum, .button_solve {
@@ -204,7 +199,7 @@ body {
 }
 
 .button_resetAll, .button_resetCalc {
-    background-color: #c90c32 /* #BF3030 */; /* https://colorscheme.ru/#3931Tw0w0w0w0 */
+    background-color: #c90c32;
 }
 
 .button_resetAll:active, .button_resetCalc:active {
@@ -218,7 +213,7 @@ body {
 }
 
 .button_solve {
-    background-color: #00A779 /* #269926 */; /* https://colorscheme.ru/#3931Tw0w0w0w0 */
+    background-color: #00A779;
 }
 
 .button_solve:active {
@@ -229,13 +224,12 @@ input::selection {
     background: #818181;
 }
 
-.text-container {
-    position: relative;
-    overflow-x: hidden;
-  }
-  
-  .text {
-    white-space: nowrap;
-    overflow-x: hidden;
-    text-overflow: ellipsis;
-  }
+@media (max-width: 541px) {
+    .workspace {
+        width: 100%;
+    }
+
+    .buttons {
+        height: calc(100vh - 191px);
+    }
+}

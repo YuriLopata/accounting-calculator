@@ -18,14 +18,14 @@ let sign = ''
 let signChanged = false
 let solve = false
 let isDelLastChar = false
-const formula = document.getElementById('display_formula')
+const formula = document.getElementById('downBar_formula')
 let operValues = []
 const operChars = ['+', '-', '×', '÷']
 
 const changeDecNumBtn = document.getElementById('numberOfDecimals')
 
 let mems = ['', '', '']
-const memBtn = document.querySelector('#upperBar_memButton')
+const memBtn = document.querySelector('.upperBar_memButton')
 const memVal = document.querySelector('#upperBar_memValue')
 
 const rewriteCurrentResult = (newNumberChar) => {
@@ -45,8 +45,8 @@ const addToResult = (newNumberChar) => {
 }
 
 const addToFormula = (newNumberChar) => {
-  const initialFormula = document.getElementById('display_formula').value
-  document.getElementById('display_formula').value =
+  const initialFormula = document.getElementById('downBar_formula').value
+  document.getElementById('downBar_formula').value =
   mirrorText(newNumberChar) + initialFormula
 }
 
@@ -78,7 +78,7 @@ const clearResult = () => {
   clearResultText()
 }
 const clearFormula = () => {
-  document.getElementById('display_formula').value = ''
+  document.getElementById('downBar_formula').value = ''
 }
 const clearCurrentResultValue = () => {
   currentResult = ''
@@ -315,7 +315,8 @@ const solveUnary = (x, oper) => {
         // console.log('if 2');
         delLastChar(formula.value)
         addShortedRes(result)
-        rewriteFormula(delSeveralLastChars(formula.value), String(result).length) // fix
+        rewriteFormula(delSeveralLastChars(formula.value),
+          String(result).length) // fix
       }
 
       addToFormula(result + sign)
@@ -326,7 +327,8 @@ const solveUnary = (x, oper) => {
     !isLastCharOper(prevResult) && prevResult > 0) {
       // console.log(3);
       rewriteResult(x)
-      rewriteFormula(delSeveralLastChars(mirrorText(formula.value), prevResult.length))
+      rewriteFormula(delSeveralLastChars(mirrorText(formula.value),
+        prevResult.length))
       addToFormula(')' + result + '(')
     }
 
@@ -334,7 +336,8 @@ const solveUnary = (x, oper) => {
     !isLastCharOper(prevResult) && !solve && prevResult < 0) {
       // console.log(4);
       rewriteResult(x)
-      formula.value = mirrorText(delSeveralLastChars(mirrorText(formula.value), prevResult.length + 2))
+      formula.value = mirrorText(delSeveralLastChars(mirrorText(formula.value),
+        prevResult.length + 2))
       addToFormula(result)
     }
 
@@ -349,7 +352,8 @@ const solveUnary = (x, oper) => {
     !isLastCharOper(prevResult) && solve) {
       // console.log(6);
       rewriteResult(x)
-      rewriteFormula(delSeveralLastChars(mirrorText(formula.value), prevResult.length))
+      rewriteFormula(delSeveralLastChars(mirrorText(formula.value),
+        prevResult.length))
       addToFormula(result)
     }
     signChanged = true
@@ -372,7 +376,7 @@ const clickDelLastChar = () => {
 }
 
 const clickShowMemBut = () => {
-  if (document.getElementById('display_formula').value !== '' &&
+  if (document.getElementById('downBar_formula').value !== '' &&
   sign === '') {
     currentResult = memVal.value
     result = memVal.value
@@ -430,6 +434,11 @@ const clickSolveButton = () => {
 
 const clickNumberButton = (clickedNum) => {
   // console.clear()
+  if (!solve && Number(result) === 0 && result !== '' &&
+  !isLastChar(result, '.')) {
+    clearResult()
+  }
+
   if (String(result).length === 11 && clickedNum === '00') {
     // console.log('1st return');
     if (currentResult.length === 12) {
@@ -483,6 +492,7 @@ const clickNumberButton = (clickedNum) => {
 
   if (clickedNum === '.' && result.includes('.') &&
   !isLastCharOper(result)) {
+    // console.log('6st return');
     return
   }
 
@@ -650,8 +660,6 @@ const clickMarkUpButton = () => {
   }
 }
 
-changeDecNumBtn.addEventListener('click', changeDecNum)
-
 // MEMORY START
 
 const getMemNum = () => {
@@ -697,12 +705,12 @@ const clickSaveMemButton = (clickedNum) => {
   if (sign !== '=' && sign !== '') {
     addOperValue(result)
     currentResult =
-    solveBinary(currentResult, sign, operValues[operValues.length - 1])
+      solveBinary(currentResult, sign, operValues[operValues.length - 1])
     sign = '='
     rewriteCurrentResult('')
     clearResult()
     addToResult(currentResult)
-    if (document.getElementById('display_formula').value !== '' &&
+    if (document.getElementById('downBar_formula').value !== '' &&
     solve === false) {
       addToFormula('=' + currentResult)
     }
@@ -722,10 +730,7 @@ const clickSaveMemButton = (clickedNum) => {
 
 // INTERACTIVE START
 
-const scrollContainer = document.querySelector('#display_formula')
-
-// this one!
-scrollContainer.addEventListener('wheel', (e) => {
+formula.addEventListener('wheel', (e) => {
   e.preventDefault()
   if (formula.value !== '') {
     formula.focus()
@@ -738,7 +743,7 @@ scrollContainer.addEventListener('wheel', (e) => {
     const elapsed = performance.now() - startTime
     const progress = Math.min(elapsed / scrollDuration, 1)
     const scrollDelta = scrollAmount * progress
-    scrollContainer.scrollLeft += scrollDelta
+    formula.scrollLeft += scrollDelta
     if (progress < 1) {
       requestAnimationFrame(scrollStep)
     }
@@ -746,18 +751,6 @@ scrollContainer.addEventListener('wheel', (e) => {
 
   scrollStep()
 })
-
-// // maybe
-// const buttons = document.querySelectorAll('.button')
-// for (const button of buttons) {
-//   button.onclick = (e) => {
-//     const buttonsArr = {
-//       button_number: clickNumberButton(e.target.value)
-//     }
-
-//     buttonsArr.forEach()
-//   }
-// }
 
 const buttons = document.querySelectorAll('.button')
 for (const button of buttons) {
@@ -784,12 +777,6 @@ for (const button of buttons) {
     case button.classList.contains('button_delLastChar'):
       clickDelLastChar()
       break
-    case button.classList.contains('button_resetMemory'):
-      clearMemory()
-      break
-    case button.classList.contains('button_showMemory'):
-      clickShowMemBut()
-      break
     case button.classList.contains('button_solve'):
       clickSolveButton()
       break
@@ -799,25 +786,29 @@ for (const button of buttons) {
     case button.classList.contains('button_markUp'):
       clickMarkUpButton()
       break
-    case button.classList.contains('button_save'):
+    case button.classList.contains('button_numberOfDecimals'):
+      changeDecNum()
+      break
+    case button.classList.contains('button_saveMem'):
       clickSaveMemButton(e.target.value[1]) // + or -
+      break
+    case button.classList.contains('button_resetMemory'):
+      clearMemory()
+      break
+    case button.classList.contains('button_showMemory'):
+      clickShowMemBut()
       break
     }
   }
 }
 
-document.addEventListener('keydown', function(event) {
-  // Get the key code for the key that was pressed
-  console.log(event.key);
-  const key = event.key;
-
-  // Get a reference to the buttons that correspond to the key that was pressed
-  const buttons = document.querySelectorAll('.button');
-
-  // Iterate over the buttons and simulate a button click for the corresponding button
+document.addEventListener('keydown', (e) => {
+  const key = e.key
+  const buttons = document.querySelectorAll('.button')
   buttons.forEach((button) => {
     if (button.value === key) {
-      button.click();
+      button.click()
+      button.focus()
     }
-  });
-});
+  })
+})
