@@ -11,7 +11,8 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap"
+    rel="stylesheet">
 
 </head>
 <body>
@@ -21,7 +22,7 @@
         <div class="display">
             <div class="display_upperBar upperBar">
                 <div class="upperBar_mem">
-                    <button id="upperBar_memButton" value="0">
+                    <button class="button upperBar_memButton" value="0">
                         M1:
                     </button>
 
@@ -34,8 +35,8 @@
             </div>
 
             <div class="display_middleBar middleBar">
-                <button id="numberOfDecimals" title="Decimal places"
-                value = "initial">
+                <button class="button button_numberOfDecimals" value="initial"
+                id="numberOfDecimals" title="Decimal places">
                     F:<br>initial
                 </button>
                 
@@ -44,9 +45,7 @@
             </div>
 
             <div class="display_downBar downBar">
-                <!-- <p class="downBar_ellipsis">...</p> -->
-
-                <input type="text" id="display_formula" 
+                <input type="text" id="downBar_formula" 
                 readonly placeholder="Entire formula" value="">
             </div>
         </div>
@@ -64,12 +63,12 @@
                 MR
             </button>
             
-            <button class="button button_save"
+            <button class="button button_saveMem"
             value="M-" title="Save negative value in the memory">
                 M-
             </button>
             
-            <button class="button button_save"
+            <button class="button button_saveMem"
             value="M+" title="Save positive value in the memory">
                 M+
             </button>
