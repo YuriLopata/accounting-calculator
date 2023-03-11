@@ -263,6 +263,8 @@ const solveUnary = (x, oper) => {
   let prevResult
   switch (oper) {
   case '√':
+    if (isLastCharOper(result)) return
+
     if (sign === '=') {
       addToFormula('; ' + oper + mirrorText(result) + '=')
     } else {
@@ -570,20 +572,24 @@ const clickNumberButton = (clickedNum) => {
 }
 
 const clickBinaryButton = (clickedNum) => {
-  // console.clear();
+  console.clear();
   if (result !== '' && result !== '-') {
-    // console.log('main if');
+    console.log('main if');
     addOperValue(result)
 
+    if (isLastChar(result, '.')) {
+      clickDelLastChar()
+    }
+
     if (isLastCharOper(result) && sign !== '=' && result !== '-') {
-      // console.log('if');
+      console.log('if');
       result = delLastChar(result)
       addShortedRes(result)
     } else if (operValues.length < 2 && sign !== 'MU') { // there was || instead of &&
-      // console.log('else if');
+      console.log('else if');
       currentResult = result
     } else {
-      // console.log('else');
+      console.log('else');
       currentResult =
         solveBinary(currentResult, sign, operValues[operValues.length - 1])
     }
