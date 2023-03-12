@@ -3,61 +3,72 @@
 const mirrorText = (text) => {
   text = String(text)
   // Convert the text to an array of characters
-  const chars = text.split('');
+  const chars = text.split('')
   // Reverse the order of the characters
-  const reversedChars = chars.reverse();
+  const reversedChars = chars.reverse()
   // Join the characters back together into a string
-  const mirroredText = reversedChars.join('');
+  const mirroredText = reversedChars.join('')
   // Return the mirrored text
-  return mirroredText;
+  return mirroredText
 }
 
 let currentResult = ''
 let result = ''
 let sign = ''
-let signChanged = false
 let solve = false
+let isSignChanged = false
 let isDelLastChar = false
-const formula = document.getElementById('downBar_formula')
+const currentResultText = document.querySelector('#upperBar_currentResult')
+const resultText = document.querySelector('#middleBar_result')
+const formula = document.querySelector('#downBar_formula')
+const changeDecNumBtn = document.querySelector('#numberOfDecimals')
 let operValues = []
 const operChars = ['+', '-', '×', '÷']
-
-const changeDecNumBtn = document.getElementById('numberOfDecimals')
 
 let mems = ['', '', '']
 const memBtn = document.querySelector('.upperBar_memButton')
 const memVal = document.querySelector('#upperBar_memValue')
 
+const areClickedNumZeros = (clickedNum) => {
+  if (clickedNum === '0' || clickedNum === '00') return true
+  return false
+}
+
 const rewriteCurrentResult = (newNumberChar) => {
-  document.getElementById('upperBar_currentResult').value = newNumberChar
+  currentResultText.value = newNumberChar
 }
 const rewriteResult = (num) => {
-  document.getElementById('middleBar_result').value = num
+  resultText.value = num
 }
 
 const addToCurrentResult = (newNumberChar) => {
-  document.getElementById('upperBar_currentResult').value += newNumberChar
+  currentResultText.value += newNumberChar
 }
 
 const addToResult = (newNumberChar) => {
   result += newNumberChar
-  document.getElementById('middleBar_result').value = result
+  resultText.value = result
 }
 
 const addToFormula = (newNumberChar) => {
-  const initialFormula = document.getElementById('downBar_formula').value
-  document.getElementById('downBar_formula').value =
+  const initialFormula = formula.value
+  formula.value =
   mirrorText(newNumberChar) + initialFormula
 }
 
-const rewriteFormula = (newNumberChar) => {
-  formula.value = mirrorText(newNumberChar)
+const addToResultAndFormula = (newNumberChar) => {
+  addToResult(newNumberChar)
+  addToFormula(newNumberChar)
 }
 
 const addToAll = (newNumberChar) => {
   addToCurrentResult(newNumberChar)
   addToResult(newNumberChar)
   addToFormula(newNumberChar)
+}
+
+const rewriteFormula = (newNumberChar) => {
+  formula.value = mirrorText(newNumberChar)
 }
 
 const addOperValue = (newOperValue) => {
@@ -71,20 +82,20 @@ const clearResultValue = () => {
   result = ''
 }
 const clearResultText = () => {
-  document.getElementById('middleBar_result').value = ''
+  resultText.value = ''
 }
 const clearResult = () => {
   clearResultValue()
   clearResultText()
 }
 const clearFormula = () => {
-  document.getElementById('downBar_formula').value = ''
+  formula.value = ''
 }
 const clearCurrentResultValue = () => {
   currentResult = ''
 }
 const clearCurrentResultText = () => {
-  document.getElementById('upperBar_currentResult').value = ''
+  currentResultText.value = ''
 }
 const clearCurrentResult = () => {
   clearCurrentResultValue()
@@ -98,7 +109,7 @@ const clearCalc = () => {
   clearOperValues()
   solve = false
   sign = ''
-  signChanged = false
+  isSignChanged = false
 }
 
 const clearMemory = () => {
@@ -107,9 +118,7 @@ const clearMemory = () => {
 }
 
 const isSolveFirst = () => {
-  if (formula.value.includes('=')) {
-    return false
-  }
+  if (formula.value.includes('=')) return false
   return true
 }
 
@@ -166,27 +175,20 @@ const delSeveralLastChars = (str, charNum) => {
 const isLastChar = (str, char) => {
   str = str.toString()
   const strLastChar = str.slice(str.length - 1)
-  if (strLastChar.includes(char)) {
-    return true
-  }
+  if (strLastChar.includes(char)) return true
   return false
 }
 
 const isLastCharOper = (str) => {
   str = str.toString()
   const strLastChar = str.slice(str.length - 1)
-  if (operChars.includes(strLastChar)) {
-    return true
-  }
+  if (operChars.includes(strLastChar)) return true
   return false
 }
 
 const changeSign = (num) => {
-  if (Math.sign(Number(num)) === 1) {
-    return -Math.abs(num)
-  } else {
-    return Math.abs(num)
-  }
+  if (Math.sign(Number(num)) === 1) return -Math.abs(num)
+  return Math.abs(num)
 }
 
 const percentage = (num, per) => {
@@ -240,7 +242,6 @@ const changeDecNum = () => {
   }
 
   if (solve || Number(result) === 0) {
-    // console.log('a');
     rewriteResult(changeDecResult(currentResult))
   }
   result = changeDecResult(result)
@@ -261,26 +262,33 @@ const solveBinary = (x, oper, y) => {
 
 const solveUnary = (x, oper) => {
   let prevResult
-  switch (oper) {
-  case '√':
-    if (isLastCharOper(result)) return
 
-    if (sign === '=') {
-      addToFormula('; ' + oper + mirrorText(result) + '=')
-    } else {
-      x = document.getElementById('middleBar_result').value
-      clearFormula()
-      addToFormula(oper + mirrorText(result) + '=')
-    }
+  const sqrtSet = () => {
     currentResult = Math.sqrt(Number(x))
     clearResult()
     rewriteResult(currentResult)
     addToFormula(currentResult)
     clearCurrentResultText()
     sign = '√'
-    solve = true // necessary?
+    solve = true
     addToResult(currentResult)
-    signChanged = true
+    isSignChanged = true
+  }
+
+  switch (oper) {
+  case '√':
+    if (isLastCharOper(result)) return
+
+    if (sign === '=') {
+      addToFormula('; ' + oper + mirrorText(result) + '=')
+      sqrtSet()
+      return
+    }
+
+    x = resultText.value
+    clearFormula()
+    addToFormula(oper + result + '=')
+    sqrtSet()
     break
   case '+/-':
     // console.clear('');
@@ -343,14 +351,14 @@ const solveUnary = (x, oper) => {
       addToFormula(result)
     }
 
-    if (!operChars.includes(sign) && !signChanged &&
+    if (!operChars.includes(sign) && !isSignChanged &&
     !isLastCharOper(prevResult) && solve) {
       // console.log(5);
       rewriteResult(x)
       addToFormula('; ' + (result))
     }
 
-    if (!operChars.includes(sign) && signChanged &&
+    if (!operChars.includes(sign) && isSignChanged &&
     !isLastCharOper(prevResult) && solve) {
       // console.log(6);
       rewriteResult(x)
@@ -358,48 +366,44 @@ const solveUnary = (x, oper) => {
         prevResult.length))
       addToFormula(result)
     }
-    signChanged = true
+    isSignChanged = true
     break
   }
 }
 
 const clickDelLastChar = () => {
-  if (solve && result.length === 1 && !isDelLastChar) {
-    return
-  }
+  if (solve && result.length === 1 && !isDelLastChar) return
 
   result = delLastChar(result)
   addShortedRes(result)
   isDelLastChar = true
 
-  if (operValues.length === 1) {
-    clearOperValues()
-  }
+  if (operValues.length === 1) clearOperValues()
 }
 
-const clickShowMemBut = () => {
-  if (document.getElementById('downBar_formula').value !== '' &&
-  sign === '') {
+const clickShowMemBtn = () => {
+  const showMemBtnSet = () => {
+    isSignChanged = false
+    isDelLastChar = false
+    rewriteCurrentResult(currentResult)
+    rewriteResult(result)
+    addToFormula(memVal.value)
+  }
+
+  if ((formula.value !== '' && sign === '') || solve) {
     currentResult = memVal.value
     result = memVal.value
     addToFormula(';' + ' ')
-  } else if (solve) {
-    currentResult = memVal.value
-    result = memVal.value
-    addToFormula(';' + ' ')
-  } else {
-    result = memVal.value
+    showMemBtnSet()
+    return
   }
-  signChanged = false
-  isDelLastChar = false
-  rewriteCurrentResult(currentResult)
-  rewriteResult(result)
-  addToFormula(memVal.value)
+
+  result = memVal.value
+  showMemBtnSet()
 }
 
-const clickSolveButton = () => {
+const clickSolveBtn = () => {
   if (sign === '÷' && result !== '' && Number(result) === 0) {
-    // console.log('a');
     showZeroDevisionError()
     solve = true
     sign = '='
@@ -408,44 +412,46 @@ const clickSolveButton = () => {
   }
 
   if (isLastCharOper(result) && result !== '-') {
-    // console.log('b');
     clearResult()
-    addToResult(currentResult)
-    addToFormula(currentResult)
+    addToResultAndFormula(currentResult)
   }
 
-  if (sign !== '=' && sign !== 'MU' && sign !== '%' && currentResult !== '') {
-    // console.log('c');
+  if (!['=', '√', 'MU', '%'].includes(sign) && currentResult !== '') {
     addOperValue(result)
     currentResult =
-    solveBinary(currentResult, sign, operValues[operValues.length - 1])
+      solveBinary(currentResult, sign, operValues[operValues.length - 1])
     sign = '='
     rewriteCurrentResult('')
     clearResult()
     addToResult(changeDecResult(currentResult))
     if (formula.value !== '' && !solve) {
-      // console.log('d');
       addToFormula('=' + currentResult)
     }
     clearOperValues()
     solve = true
-    signChanged = false
+    isSignChanged = false
     isDelLastChar = false
   }
 }
 
-const clickNumberButton = (clickedNum) => {
-  // console.clear()
-  if (!solve && Number(result) === 0 && result !== '' &&
-  !isLastChar(result, '.')) {
-    clearResult()
+const clickNumberBtn = (clickedNum) => {
+  console.log(areClickedNumZeros(clickedNum));
+  const numberBtnSet = () => {
+    if (formula.value === '' && sign === '=' && result === '') {
+      clearFormula()
+    }
+
+    if (currentResult === '') addToCurrentResult(clickedNum)
+
+    isSignChanged = false
   }
 
+  if (!solve && Number(result) === 0 && result !== '' &&
+  !isLastChar(result, '.')) clearResult()
+
   if (String(result).length === 11 && clickedNum === '00') {
-    // console.log('1st return');
     if (currentResult.length === 12) {
-      addToResult('0')
-      addToFormula('0')
+      addToResultAndFormula('0')
       return
     }
     addToAll('0')
@@ -453,38 +459,27 @@ const clickNumberButton = (clickedNum) => {
   }
 
   if (String(result).length === 12 && !isLastCharOper(result) &&
-  sign !== '=') {
-    // console.log('1.5st return');
-    return
-  }
+  sign !== '=') return
 
-  if ((clickedNum === '0' || clickedNum === '00') &&
-  sign === '÷' && isLastChar(result, '0') && !result.includes('.')) {
-    // console.log('2st return');
-    return
-  }
+  if (areClickedNumZeros(clickedNum) && sign === '÷' &&
+  isLastChar(result, '0') && !result.includes('.')) return
 
-  if ((clickedNum === '0' || clickedNum === '00') &&
-  sign === '÷' && !isLastChar(result, '.') && !isLastChar(result, '0') &&
+  if (areClickedNumZeros(clickedNum) && sign === '÷' &&
+  !isLastChar(result, '.') && !isLastChar(result, '0') &&
   !isLastChar(result, sign)) {
-    // console.log('3st return');
-    addToResult(clickedNum)
-    addToFormula(clickedNum)
+    addToResultAndFormula(clickedNum)
     return
   }
 
-  if ((clickedNum === '0' || clickedNum === '00') &&
+  if (areClickedNumZeros(clickedNum) &&
   sign === '÷' && isLastChar(result, '0') && result.includes('.')) {
-    // console.log('4st return');
-    addToResult(clickedNum)
     rewriteCurrentResult(currentResult)
-    addToFormula(clickedNum)
+    addToResultAndFormula(clickedNum)
     return
   }
 
-  if ((clickedNum === '0' || clickedNum === '00') &&
+  if (areClickedNumZeros(clickedNum) &&
   sign === '÷' && !isLastChar(result, '.')) {
-    // console.log('5st return');
     result = '0'
     rewriteResult('0')
     rewriteCurrentResult(currentResult)
@@ -493,137 +488,104 @@ const clickNumberButton = (clickedNum) => {
   }
 
   if (clickedNum === '.' && result.includes('.') &&
-  !isLastCharOper(result)) {
-    // console.log('6st return');
-    return
-  }
+  !isLastCharOper(result)) return
 
-  if (isLastChar(formula.value, ';')) {
-    addToFormula(' ')
-  }
+  if (isLastChar(formula.value, ';')) addToFormula(' ')
 
   if ((clickedNum !== '00' || clickedNum !== '0') &&
   (result !== '' || solve)) {
-    // console.log('main if');
-    if (solve && !isDelLastChar && (sign === '=' || sign === '√')) {
-      // console.log('1 if 1');
-      if (result === 'Error') {
-        clearFormula()
-      }
+    if (solve && !isDelLastChar && ['=', '√', 'MU', '%'].includes(sign)) {
+      if (result === 'Error') clearFormula()
 
-      if (result !== 'Error') {
-        addToFormula('; ')
-      }
+      if (result !== 'Error') addToFormula('; ')
+
       clearResult()
       clearOperValues()
       clearCurrentResult()
 
-      if (clickedNum === '.') {
-        // console.log('2 if 1');
-        addToAll('0')
-      }
+      if (clickedNum === '.') addToAll('0')
 
-      addToFormula(clickedNum)
-      addToResult(clickedNum)
-      sign = '' // necessary?
-    } else {
-      // console.log('1 else');
-      if (isLastCharOper(result) && result.length > 1 && sign !== '') {
-        // console.log('2 if 2');
-        clearResult()
-      }
-
-      if (clickedNum === '.' && result === '') {
-        // console.log('2 if 3');
-        addToResult('0')
-        addToFormula('0')
-      }
-
-      if (typeof result === 'string' && result !== '-' &&
-      !isLastChar(result, '.') && result === '') {
-        result = Number(result)
-      }
-      if (typeof result === 'number' && result === 0) {
-        result = ''
-      }
-      addToResult(clickedNum)
-      addToFormula(clickedNum)
+      addToResultAndFormula(clickedNum)
+      sign = ''
+      numberBtnSet()
+      return
     }
 
-    if (formula.value === '' &&
-    sign === '=' && result === '') {
-      // console.log('1 if 2');
-      clearFormula()
+    if (isLastCharOper(result) && result.length > 1 && sign !== '') {
+      clearResult()
     }
 
-    if (currentResult === '') {
-      // console.log('1 if 3');
-      addToCurrentResult(clickedNum)
-    }
-  } else if (clickedNum !== '00' && clickedNum !== '0') {
-    // console.log('main else if');
-    if (clickedNum === '.') {
-      // console.log('1 if 4');
-      addToAll('0')
-    }
+    if (clickedNum === '.' && result === '') addToResultAndFormula('0')
+
+    if (typeof result === 'string' && result !== '-' && result === '' &&
+    !isLastChar(result, '.')) result = Number(result)
+
+    if (typeof result === 'number' && result === 0) result = ''
+
+    addToResultAndFormula(clickedNum)
+    numberBtnSet()
+    return
+  }
+
+  if (clickedNum !== '00' && clickedNum !== '0') {
+    if (clickedNum === '.') addToAll('0')
+
+    isSignChanged = false
     addToAll(clickedNum)
   }
-  signChanged = false
 }
 
-const clickBinaryButton = (clickedNum) => {
-  console.clear();
+const clickBinaryBtn = (clickedNum) => {
+  const binaryBtnSet = () => {
+    sign = clickedNum
+    rewriteCurrentResult(currentResult)
+    addToResultAndFormula(clickedNum)
+    solve = false
+    isSignChanged = false
+    isDelLastChar = false
+  }
+
   if (result !== '' && result !== '-') {
-    console.log('main if');
     addOperValue(result)
 
-    if (isLastChar(result, '.')) {
-      clickDelLastChar()
-    }
+    if (isLastChar(result, '.')) clickDelLastChar()
 
     if (isLastCharOper(result) && sign !== '=' && result !== '-') {
-      console.log('if');
       result = delLastChar(result)
       addShortedRes(result)
-    } else if (operValues.length < 2 && sign !== 'MU') { // there was || instead of &&
-      console.log('else if');
-      currentResult = result
-    } else {
-      console.log('else');
-      currentResult =
-        solveBinary(currentResult, sign, operValues[operValues.length - 1])
+      binaryBtnSet()
+      return
     }
 
-    sign = clickedNum
+    if (operValues.length < 2 && sign !== 'MU') {
+      currentResult = result
+      binaryBtnSet()
+      return
+    }
 
-    addToResult(clickedNum)
-    rewriteCurrentResult(currentResult)
-    addToFormula(clickedNum)
+    currentResult =
+      solveBinary(currentResult, sign, operValues[operValues.length - 1])
+
+    binaryBtnSet()
   }
 
-  solve = false
-  signChanged = false
-  isDelLastChar = false
-
-  if (clickedNum === '-' && !isLastCharOper(result)) {
-    addToAll(clickedNum)
-  }
+  if (clickedNum === '-' && !isLastCharOper(result)) addToAll(clickedNum)
 }
 
-const clickPercentButton = () => {
+const clickPercentBtn = () => {
   if (sign !== '' && operValues.length > 0 && !isLastCharOper(result)) {
-    // console.clear()
-    // console.log('main if');
     let percent = percentage(currentResult, result)
-    if (sign === '×' || sign === '÷') {
-      percent = result / 100
-    }
+
+    if (sign === '×' || sign === '÷') percent = result / 100
+
     currentResult =
       solveBinary(currentResult, sign, percent)
+
     result = currentResult
 
+    solve = true
     sign = '%'
-    signChanged = false
+    isSignChanged = false
     isDelLastChar = false
 
     clearOperValues()
@@ -633,7 +595,7 @@ const clickPercentButton = () => {
   }
 }
 
-const clickMarkUpButton = () => {
+const clickMarkUpBtn = () => {
   if (operValues > 1) {
     let percent = percentage(currentResult, 100 - result)
     switch (sign) {
@@ -656,8 +618,9 @@ const clickMarkUpButton = () => {
       break
     }
     result = currentResult
+    solve = true
     sign = 'MU'
-    signChanged = false
+    isSignChanged = false
     isDelLastChar = false
     clearOperValues()
     clearCurrentResultText()
@@ -707,7 +670,9 @@ const saveMemNum = (num) => {
   }
 }
 
-const clickSaveMemButton = (clickedNum) => {
+const clickSaveMemBtn = (clickedNum) => {
+  if (isLastCharOper(result) && memVal.value[0] === '-') return
+
   if (sign !== '=' && sign !== '') {
     addOperValue(result)
     currentResult =
@@ -716,20 +681,22 @@ const clickSaveMemButton = (clickedNum) => {
     rewriteCurrentResult('')
     clearResult()
     addToResult(currentResult)
-    if (document.getElementById('downBar_formula').value !== '' &&
-    solve === false) {
+
+    if (formula.value !== '' && solve === false) {
       addToFormula('=' + currentResult)
     }
+
     clearOperValues()
     solve = true
     rewriteResult(currentResult)
     memVal.value = Number(memVal.value) + currentResult
     saveMemNum(memVal.value)
-  } else {
-    currentResult = document.getElementById('middleBar_result').value
-    memVal.value = solveBinary(memVal.value, clickedNum, currentResult)
-    saveMemNum(memVal.value)
+    return
   }
+
+  currentResult = resultText.value
+  memVal.value = solveBinary(memVal.value, clickedNum, currentResult)
+  saveMemNum(memVal.value)
 }
 
 // MEMORY END
@@ -738,9 +705,8 @@ const clickSaveMemButton = (clickedNum) => {
 
 formula.addEventListener('wheel', (e) => {
   e.preventDefault()
-  if (formula.value !== '') {
-    formula.focus()
-  }
+  if (formula.value !== '') formula.focus()
+
   const scrollAmount = e.deltaY / 10
   const scrollDuration = 200 // milliseconds
   const startTime = performance.now()
@@ -750,9 +716,7 @@ formula.addEventListener('wheel', (e) => {
     const progress = Math.min(elapsed / scrollDuration, 1)
     const scrollDelta = scrollAmount * progress
     formula.scrollLeft += scrollDelta
-    if (progress < 1) {
-      requestAnimationFrame(scrollStep)
-    }
+    if (progress < 1) requestAnimationFrame(scrollStep)
   }
 
   scrollStep()
@@ -763,15 +727,13 @@ for (const button of buttons) {
   button.onclick = (e) => {
     switch (true) {
     case button.classList.contains('button_number'):
-      clickNumberButton(e.target.value)
+      clickNumberBtn(e.target.value)
       break
     case button.classList.contains('button_operBinary'):
-      clickBinaryButton(e.target.textContent.trim())
+      clickBinaryBtn(e.target.textContent.trim())
       break
     case button.classList.contains('button_operUnary'):
-      if (result !== '') {
-        solveUnary(currentResult, e.target.value)
-      }
+      if (result !== '') solveUnary(currentResult, e.target.value)
       break
     case button.classList.contains('button_resetCalc'):
       clearCalc()
@@ -784,25 +746,25 @@ for (const button of buttons) {
       clickDelLastChar()
       break
     case button.classList.contains('button_solve'):
-      clickSolveButton()
+      clickSolveBtn()
       break
     case button.classList.contains('button_percent'):
-      clickPercentButton()
+      clickPercentBtn()
       break
     case button.classList.contains('button_markUp'):
-      clickMarkUpButton()
+      clickMarkUpBtn()
       break
     case button.classList.contains('button_numberOfDecimals'):
       changeDecNum()
       break
     case button.classList.contains('button_saveMem'):
-      clickSaveMemButton(e.target.value[1]) // + or -
+      clickSaveMemBtn(e.target.value[1]) // + or -
       break
     case button.classList.contains('button_resetMemory'):
       clearMemory()
       break
     case button.classList.contains('button_showMemory'):
-      clickShowMemBut()
+      clickShowMemBtn()
       break
     }
   }
