@@ -1,12 +1,17 @@
 'use strict'
 
 const clickNumberBtn = (clickedNum) => {
+  // The set is used in several places of the function
   const numberBtnSet = () => {
     if (formula.value === '' && sign === '=' && result === '') {
       clearFormula()
     }
     if (currentResult === '') addToCurrentResult(clickedNum)
     resetChecks()
+  }
+
+  if (Number(result) === 0 && result !== '' && formula.value === '') {
+    clearResult()
   }
 
   if (String(result).length === 11 && clickedNum === '00') {
@@ -40,7 +45,7 @@ const clickNumberBtn = (clickedNum) => {
 
   if (areClickedNumZeros(clickedNum) && binaryOperChars.includes(sign) &&
   !isLastChar(result, '.')) {
-    result = '0'
+    modifyResult('0')
     rewriteResult('0')
     rewriteCurrentResult(currentResult)
     addToFormula('0')
@@ -61,7 +66,8 @@ const clickNumberBtn = (clickedNum) => {
       clearResultsAndOperValues()
     }
 
-    if (unaryOperChars.includes(sign) && result !== 'Error') {
+    if (unaryOperChars.includes(sign) && result !== 'Error' &&
+    !isDelLastChar) {
       addToFormula('; ')
       clearResultsAndOperValues()
     }
@@ -72,7 +78,7 @@ const clickNumberBtn = (clickedNum) => {
 
     if (unaryOperChars.includes(sign)) {
       addToResultAndFormula(clickedNum)
-      sign = ''
+      modifySign('')
       numberBtnSet()
       return
     }
@@ -84,9 +90,13 @@ const clickNumberBtn = (clickedNum) => {
     if (clickedNum === '.' && result === '') addToResultAndFormula('0')
 
     if (typeof result === 'string' && result !== '-' && result === '' &&
-    !isLastChar(result, '.')) result = Number(result)
+    !isLastChar(result, '.')) {
+      modifyResult(Number(result))
+    }
 
-    if (typeof result === 'number' && result === 0) result = ''
+    if (typeof result === 'number' && result === 0) {
+      modifyResult('')
+    }
 
     addToResultAndFormula(clickedNum)
     numberBtnSet()

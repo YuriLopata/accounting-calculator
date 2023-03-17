@@ -1,38 +1,29 @@
 'use strict'
 
 const resetChecks = () => {
-  isSignChanged = false
-  isDelLastChar = false
-}
-
-const mirrorText = (text) => {
-  text = String(text)
-  const chars = text.split('')
-  const reversedChars = chars.reverse()
-  const mirroredText = reversedChars.join('')
-  return mirroredText
+  modifyIsSignChanged(false)
+  modifyIsDelLastChar(false)
 }
 
 const rewriteCurrentResult = (newNumberChar) => {
-  currentResultText.value = newNumberChar
+  modifyCurrentResultText(newNumberChar)
 }
 const rewriteResult = (num) => {
-  resultText.value = num
+  modifyResultText(num)
 }
 
 const addToCurrentResult = (newNumberChar) => {
-  currentResultText.value += newNumberChar
+  modifyCurrentResultText(currentResultText.value + newNumberChar)
 }
 
 const addToResult = (newNumberChar) => {
-  result += newNumberChar
-  resultText.value = result
+  modifyResult(result + newNumberChar)
+  modifyResultText(result)
 }
 
 const addToFormula = (newNumberChar) => {
   const initialFormula = formula.value
-  formula.value =
-  mirrorText(newNumberChar) + initialFormula
+  modifyFormula(mirrorText(newNumberChar) + initialFormula)
 }
 
 const addToResultAndFormula = (newNumberChar) => {
@@ -47,34 +38,34 @@ const addToAll = (newNumberChar) => {
 }
 
 const rewriteFormula = (newNumberChar) => {
-  formula.value = mirrorText(newNumberChar)
+  modifyFormula(mirrorText(newNumberChar))
 }
 
 const addOperValue = (newOperValue) => {
-  operValues.push(newOperValue)
+  addOperValues(newOperValue)
 }
 
 const clearOperValues = () => {
-  operValues = []
+  modifyOperValues([])
 }
 const clearResultValue = () => {
-  result = ''
+  modifyResult('')
 }
 const clearResultText = () => {
-  resultText.value = ''
+  modifyResultText('')
 }
 const clearResult = () => {
   clearResultValue()
   clearResultText()
 }
 const clearFormula = () => {
-  formula.value = ''
+  modifyFormula('')
 }
 const clearCurrentResultValue = () => {
-  currentResult = ''
+  modifyCurrentResult('')
 }
 const clearCurrentResultText = () => {
-  currentResultText.value = ''
+  modifyCurrentResultText('')
 }
 const clearCurrentResult = () => {
   clearCurrentResultValue()
@@ -92,13 +83,13 @@ const clearCalc = () => {
   clearFormula()
   clearOperValues()
   resetChecks()
-  solve = false
-  sign = ''
+  modifySolve(false)
+  modifySign('')
 }
 
 const clearMemory = () => {
-  memValues = ['', '', '']
-  memShown.value = ''
+  modifyMemValues(['', '', ''])
+  modifyMemShown('')
 }
 
 const clearAll = () => {

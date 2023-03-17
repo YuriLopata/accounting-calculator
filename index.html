@@ -20,29 +20,29 @@
     <div class="workspace">
         <!-- Display start -->
         <div class="display">
-            <div class="display_upperBar upperBar">
-                <div class="upperBar_mem">
-                    <button class="button upperBar_memButton" value="m"
-                    data-action="change-mem">
+            <div class="display_upBar upBar">
+                <div class="upBar_mem">
+                    <button class="button upBar_memButton" value="m"
+                    data-action="change_mem">
                         M1:
                     </button>
 
-                    <input type="text" id="upperBar_memValue"
+                    <input type="text" id="upBar_memValue"
                     placeholder="0" value="" readonly>
                 </div>
 
-                <input type="text" id="upperBar_currentResult"
+                <input type="text" id="upBar_currentResult"
                 placeholder="Current result" value="" readonly>
             </div>
 
-            <div class="display_middleBar middleBar">
+            <div class="display_midBar midBar">
                 <button class="button button_numberOfDecimals" value="f"
                  id="numberOfDecimals" title="Decimal places"
                  data-action="decimals">
                     F:<br>initial
                 </button>
                 
-                <input type="text" id="middleBar_result"
+                <input type="text" id="midBar_result"
                 readonly placeholder="0" value="">
             </div>
 
@@ -55,27 +55,27 @@
 
         <!-- Buttons start -->
         <div class="buttons">
-            <button class="button button_resetMemory" data-action="reset-mem"
+            <button class="button button_resetMemory" data-action="reset_mem"
             title="Reset memory">
                 MC
             </button>
             
-            <button class="button button_showMemory" data-action="show-mem"
+            <button class="button button_showMemory" data-action="show_mem"
             title="Show memory on display">
                 MR
             </button>
             
-            <button class="button button_saveMem" data-action="save-mem"
+            <button class="button button_saveMem" data-action="save_mem"
             value="M-" title="Save negative value in the memory">
                 M-
             </button>
             
-            <button class="button button_saveMem" data-action="save-mem"
+            <button class="button button_saveMem" data-action="save_mem"
             value="M+" title="Save positive value in the memory">
                 M+
             </button>
             
-            <button class="button button_markUp" data-action="mark-up"
+            <button class="button button_markUp" data-action="mark_up"
             title="Margin (Markup)">
                 MU
             </button>
@@ -106,7 +106,7 @@
             </button>
             
             <button class="button button_operBinary" data-action="binary"
-            id="button_devide"
+            id="button_divide"
             value="/">
                 ÷
             </button>
@@ -117,7 +117,7 @@
             </button>
             
             <button class="button button_delLastChar" value="Delete"
-            data-action="del-last-char" title="Delete the last character">
+            data-action="del_last_char" title="Delete the last character">
                 DEL
             </button>
             
@@ -146,7 +146,7 @@
                 -
             </button>
             
-            <button class="button button_resetAll" data-action="reset-all"
+            <button class="button button_resetAll" data-action="reset_all"
             value="Escape" title="Reset calculator and memory">
                 AC
             </button>
@@ -176,7 +176,7 @@
                 =
             </button>
             
-            <button class="button button_resetCalc" data-action="reset-calc"
+            <button class="button button_resetCalc" data-action="reset_calc"
             value="Backspace" title="Reset calculator">
                 C
             </button>
@@ -200,13 +200,12 @@
     </div>
     <!-- Workspace end -->
 
-    <script src="./js/backup.js"></script>
-    <!-- <script src="./js/0_variables_and_checks.js"></script>
+    <script src="./js/0_variables_and_checks.js"></script>
     <script src="./js/1_common_functions.js"></script>
     <script src="./js/2_calculation_logic.js"></script>
     <script src="./js/3_other_logic.js"></script>
     <script src="./js/4_click_numbers.js"></script>
     <script src="./js/5_click_others.js"></script>
-    <script src="./js/6_interactive.js"></script> -->
+    <script src="./js/6_interactive.js"></script>
 </body>
 </html>
