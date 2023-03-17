@@ -57,15 +57,15 @@ const solveUnary = (x, oper) => {
   if (result === '') return
 
   const sqrtSet = () => {
-    currentResult = Math.sqrt(Number(x))
+    modifyCurrentResult(Math.sqrt(Number(x)))
     clearResult()
     rewriteResult(currentResult)
     addToFormula(currentResult)
     clearCurrentResultText()
     addToResult(currentResult)
-    sign = '√'
-    solve = true
-    isSignChanged = true
+    modifySign('√')
+    modifySolve(true)
+    modifyIsSignChanged(true)
   }
 
   switch (oper) {
@@ -87,11 +87,11 @@ const solveUnary = (x, oper) => {
     prevResult = result.toString()
 
     if (isLastCharOper(result)) {
-      result = delLastChar(result)
+      modifyResult(delLastChar(result))
     }
 
     x = changeSign(result)
-    result = x
+    modifyResult(x)
 
     if (sign === '' && !solve && currentResult === '') {
       rewriteCurrentResult(x)
@@ -100,7 +100,7 @@ const solveUnary = (x, oper) => {
     }
 
     if (sign !== '' && !solve && isLastCharOper(prevResult)) {
-      currentResult = x
+      modifyCurrentResult(x)
       operValues[0] = result
       rewriteCurrentResult(x)
       rewriteResult(x + sign)
@@ -121,8 +121,8 @@ const solveUnary = (x, oper) => {
     if (binaryOperChars.includes(sign) && currentResult !== '' &&
     !isLastCharOper(prevResult) && !solve && prevResult < 0) {
       rewriteResult(x)
-      formula.value = mirrorText(delSeveralLastChars(mirrorText(formula.value),
-        prevResult.length + 2))
+      modifyFormula(mirrorText(delSeveralLastChars(mirrorText(formula.value),
+        prevResult.length + 2)))
       addToFormula(result)
     }
 
@@ -139,7 +139,7 @@ const solveUnary = (x, oper) => {
         prevResult.length))
       addToFormula(result)
     }
-    isSignChanged = true
+    modifyIsSignChanged(true)
     break
   }
 }
@@ -155,21 +155,17 @@ const markUp = () => {
 
   switch (sign) {
   case '÷':
-    currentResult =
-      solveBinary(currentResult, sign, percent) * currentResult
+    modifyCurrentResult(solveBinary(currentResult, sign, percent) * currentResult)
     break
   case '×':
     percent = percentage(currentResult, result)
-    currentResult =
-      solveBinary(currentResult, '+', percent)
+    modifyCurrentResult(solveBinary(currentResult, '+', percent))
     break
   case '+':
-    currentResult =
-      100 * (Number(currentResult) + Number(result)) / Number(result)
+    modifyCurrentResult(100 * (Number(currentResult) + Number(result)) / Number(result))
     break
   case '-':
-    currentResult =
-      100 * (Number(currentResult) - Number(result)) / Number(result)
+    modifyCurrentResult(100 * (Number(currentResult) - Number(result)) / Number(result))
     break
   }
 }

@@ -22,20 +22,20 @@ formula.addEventListener('wheel', (e) => {
 const buttons = document.querySelectorAll('.button')
 
 const actions = {
-  'number': (button) => clickNumberBtn(button.value),
-  'binary': (button) => clickBinaryBtn(button.textContent.trim()),
-  'unary': (button) => solveUnary(currentResult, button.value),
-  'save-mem': (button) => clickSaveMemBtn(button.value[1]), // + or -
-  'reset-calc': clearCalc,
-  'reset-all': clearAll,
-  'del-last-char': clickDelLastChar,
-  'solve': clickSolveBtn,
-  'percent': clickPercentBtn,
-  'mark-up': clickMarkUpBtn,
-  'decimals': changeDecNum,
-  'change-mem': changeMemNum,
-  'reset-mem': clearMemory,
-  'show-mem': clickShowMemBtn
+  number: (button) => clickNumberBtn(button.value),
+  binary: (button) => clickBinaryBtn(button.textContent.trim()),
+  unary: (button) => solveUnary(currentResult, button.value),
+  save_mem: (button) => clickSaveMemBtn(button.value[1]), // + or -
+  reset_calc: clearCalc,
+  reset_all: clearAll,
+  del_last_char: clickDelLastChar,
+  solve: clickSolveBtn,
+  percent: clickPercentBtn,
+  mark_up: clickMarkUpBtn,
+  decimals: changeDecNum,
+  change_mem: changeMemNum,
+  reset_mem: clearMemory,
+  show_mem: clickShowMemBtn
 }
 
 const handleClick = (e) => {

@@ -1,11 +1,10 @@
 'use strict'
 const clickDelLastChar = () => {
-//   if (result === '') return
-
   if (solve && result.length === 1 && !isDelLastChar) return
 
-  result = delLastChar(result)
-  isDelLastChar = true
+  modifyResult(delLastChar(result))
+  addShortedRes(result)
+  modifyIsDelLastChar(true)
 
   if (operValues.length === 1) clearOperValues()
 }
@@ -19,23 +18,23 @@ const clickShowMemBtn = () => {
   }
 
   if ((formula.value !== '' && sign === '') || solve) {
-    currentResult = memShown.value
-    result = memShown.value
+    modifyCurrentResult(memShown.value)
+    modifyResult(memShown.value)
     addToFormula(';' + ' ')
     showMemBtnSet()
     return
   }
 
-  result = memShown.value
+  modifyResult(memShown.value)
   showMemBtnSet()
 }
 
 const clickSolveBtn = () => {
   if (sign === '÷' && result !== '' && Number(result) === 0) {
     showZeroDevisionError()
-    solve = true
-    sign = '='
-    result = 'Error'
+    modifySolve(true)
+    modifySign('=')
+    modifyResult('Error')
     return
   }
 
@@ -46,10 +45,9 @@ const clickSolveBtn = () => {
 
   if (!unaryOperChars.includes(sign) && currentResult !== '') {
     addOperValue(result)
-    currentResult =
-      solveBinary(currentResult, sign, operValues[operValues.length - 1])
+    modifyCurrentResult(solveBinary(currentResult, sign, operValues[operValues.length - 1]))
 
-    sign = '='
+    modifySign('=')
     rewriteCurrentResult('')
     clearResult()
     addToResult(changeDecResult(currentResult))
@@ -57,17 +55,17 @@ const clickSolveBtn = () => {
       addToFormula('=' + currentResult)
     }
     clearOperValues()
-    solve = true
+    modifySolve(true)
     resetChecks()
   }
 }
 
 const clickBinaryBtn = (clickedNum) => {
   const binaryBtnSet = () => {
-    sign = clickedNum
+    modifySign(clickedNum)
     rewriteCurrentResult(currentResult)
     addToResultAndFormula(clickedNum)
-    solve = false
+    modifySolve(false)
     resetChecks()
   }
 
@@ -77,19 +75,19 @@ const clickBinaryBtn = (clickedNum) => {
     if (isLastChar(result, '.')) clickDelLastChar()
 
     if (isLastCharOper(result) && sign !== '=' && result !== '-') {
-      result = delLastChar(result)
+      modifyResult(delLastChar(result))
+      addShortedRes(result)
       binaryBtnSet()
       return
     }
 
     if (operValues.length < 2 && sign !== 'MU') {
-      currentResult = result
+      modifyCurrentResult(result)
       binaryBtnSet()
       return
     }
 
-    currentResult =
-      solveBinary(currentResult, sign, operValues[operValues.length - 1])
+    modifyCurrentResult(solveBinary(currentResult, sign, operValues[operValues.length - 1]))
 
     binaryBtnSet()
   }
@@ -103,17 +101,17 @@ const clickPercentBtn = () => {
 
     if (sign === '×' || sign === '÷') percent = result / 100
 
-    currentResult = solveBinary(currentResult, sign, percent)
+    modifyCurrentResult(solveBinary(currentResult, sign, percent))
 
-    result = currentResult
+    modifyResult(currentResult)
 
     clearOperValues()
     clearCurrentResultText()
     rewriteResult(currentResult)
     addToFormula('%=' + currentResult)
 
-    solve = true
-    sign = '%'
+    modifySolve(true)
+    modifySign('%')
     resetChecks()
   }
 }
@@ -121,9 +119,9 @@ const clickPercentBtn = () => {
 const clickMarkUpBtn = () => {
   markUp()
 
-  result = currentResult
-  solve = true
-  sign = 'MU'
+  modifyResult(currentResult)
+  modifySolve(true)
+  modifySign('MU')
 
   clearOperValues()
   clearCurrentResultText()
@@ -137,9 +135,8 @@ const clickSaveMemBtn = (clickedNum) => {
 
   if (sign !== '=' && sign !== '') {
     addOperValue(result)
-    currentResult =
-      solveBinary(currentResult, sign, operValues[operValues.length - 1])
-    sign = '='
+    modifyCurrentResult(solveBinary(currentResult, sign, operValues[operValues.length - 1]))
+    modifySign('=')
     rewriteCurrentResult('')
     rewriteResult(currentResult)
 
@@ -148,14 +145,14 @@ const clickSaveMemBtn = (clickedNum) => {
     }
 
     clearOperValues()
-    solve = true
+    modifySolve(true)
     rewriteResult(currentResult)
-    memShown.value = Number(memShown.value) + currentResult
+    modifyMemShown(Number(memShown.value) + currentResult)
     saveMemNum(memShown.value)
     return
   }
 
-  currentResult = resultText.value
-  memShown.value = solveBinary(memShown.value, clickedNum, currentResult)
+  modifyCurrentResult(resultText.value)
+  modifyMemShown(solveBinary(memShown.value, clickedNum, currentResult))
   saveMemNum(memShown.value)
 }

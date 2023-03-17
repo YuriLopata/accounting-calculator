@@ -34,7 +34,7 @@ body {
     margin-bottom: 6px;
 }
 
-.upperBar {
+.upBar {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -44,7 +44,7 @@ body {
     border-radius: 4px;
 }
 
-.upperBar_mem {
+.upBar_mem {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -53,12 +53,12 @@ body {
     border-radius: 5px;
 }
 
-#upperBar_memValue {
+#upBar_memValue {
     width: 100%;
     justify-content: end;
 }
 
-#upperBar_currentResult {
+#upBar_currentResult {
     max-width: 50%;
     background-color: var(--primary-white-dark);
     color: var(--secondary-black-main);
@@ -68,7 +68,7 @@ body {
     transition: all ease 0.1s;
 }
 
-.middleBar {
+.midBar {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -78,7 +78,7 @@ body {
     margin-bottom: 6px;
 }
 
-#middleBar_result {
+#midBar_result {
     width: 100%;
     background-color: var(--primary-white-dark);
     color: var(--secondary-black-main);
@@ -150,7 +150,7 @@ body {
     opacity: 0.8;
 }
 
-.upperBar_memButton, #upperBar_memValue {
+.upBar_memButton, #upBar_memValue {
     align-content: flex-start;
     background-color: var(--primary-white-dark);
     color: var(--secondary-black-main);
@@ -162,7 +162,7 @@ body {
     transition: all ease 0.1s;
 }
 
-.upperBar_memButton {
+.upBar_memButton {
     padding: 3px;
     margin-right: 5px;
     background: var(--primary-grey-light);
@@ -185,24 +185,24 @@ body {
     transition: all ease 0.1s;
 }
 
-#upperBar_currentResult:focus, .upperBar_memButton:focus,
-#upperBar_memValue:focus, #middleBar_result:focus,
+#upBar_currentResult:focus, .upBar_memButton:focus,
+#upBar_memValue:focus, #midBar_result:focus,
 #downBar_formula:focus {
     background-color: var(--primary-grey-light);
     border-radius: 4px;
 }
 
-.upperBar_memButton:hover, .button_numberOfDecimals:hover {
+.upBar_memButton:hover, .button_numberOfDecimals:hover {
     border: none;
     transform: none;
 }
 
-.upperBar_memButton:focus, .button_numberOfDecimals:focus {
+.upBar_memButton:focus, .button_numberOfDecimals:focus {
     border: solid 1px var(--secondary-black-main) ;
     transform: none;
 }
 
-.upperBar_memButton:active, .button_numberOfDecimals:active {
+.upBar_memButton:active, .button_numberOfDecimals:active {
     background: var(--primary-grey-main);
 }
 
