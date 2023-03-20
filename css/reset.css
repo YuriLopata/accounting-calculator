@@ -323,7 +323,6 @@ textarea {
     color: #222;
 }
 
-
 ::-moz-selection {
     background: #b3d4fc;
     text-shadow: none;
@@ -378,4 +377,12 @@ img {
 
 button {
     padding: 0;
+}
+
+input,
+textarea,
+button,
+select,
+a {
+    -webkit-tap-highlight-color: transparent;
 }
