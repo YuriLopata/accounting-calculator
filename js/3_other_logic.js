@@ -1,5 +1,13 @@
 'use strict'
 
+import { mirrorText, currentResult, result, modifyResult, sign, formula,
+  changeDecNumBtn, modifyChangeDecNumBtn, memValues, memBtn,
+  modifyMemBtn, modifyMemShown, solve, isDelLastChar,
+  isLastChar } from './0_variables_and_checks_min.js'
+
+import { rewriteCurrentResult, rewriteResult, rewriteFormula, addToFormula,
+  clearResult, clearCalc } from './1_common_functions_min.js'
+
 const delLastChar = (str) => {
   str = str.toString()
   const strShorted = str.slice(0, str.length - 1)
@@ -130,3 +138,5 @@ const saveMemNum = (num) => {
     break
   }
 }
+
+export { delLastChar, addShortedRes, delSeveralLastChars, changeSign, changeDecResult, changeDecNum, getMemNum, changeMemNum, saveMemNum }

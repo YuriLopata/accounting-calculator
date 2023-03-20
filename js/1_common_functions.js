@@ -1,5 +1,11 @@
 'use strict'
 
+import { mirrorText, modifyCurrentResult, result, modifyResult, modifySign,
+  currentResultText, modifyCurrentResultText, modifyResultText, formula,
+  modifyFormula, addOperValues, modifyOperValues, modifyMemValues,
+  modifyMemShown, modifySolve, modifyIsSignChanged,
+  modifyIsDelLastChar } from './0_variables_and_checks_min.js'
+
 const resetChecks = () => {
   modifyIsSignChanged(false)
   modifyIsDelLastChar(false)
@@ -102,3 +108,10 @@ const showZeroDevisionError = () => {
   rewriteResult('Error')
   rewriteFormula("You can't divide by zero")
 }
+
+export { resetChecks, rewriteCurrentResult, rewriteResult, rewriteFormula,
+  addToCurrentResult, addToResult, addToFormula, addToResultAndFormula,
+  addToAll, clearResultValue, clearResultText, clearResult, clearFormula,
+  clearCurrentResultValue, clearCurrentResultText, clearCurrentResult,
+  clearResultsAndOperValues, clearCalc, clearMemory, clearAll, addOperValue,
+  clearOperValues, showZeroDevisionError }

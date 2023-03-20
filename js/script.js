@@ -1,31 +1,54 @@
+'use strict'
 
-// import { mirrorText, resetChecks, rewriteCurrentResult, rewriteResult, rewriteFormula, addToCurrentResult, addToResult, addToFormula, addToResultAndFormula, addToAll, clearResultValue, clearResultText, clearResult, clearFormula, clearCurrentResultValue, clearCurrentResultText, clearCurrentResult, clearResultsAndOperValues, clearCalc, clearMemory, clearAll, addOperValue, clearOperValues, showZeroDevisionError  } from './1_common_functions.js'
+import { currentResult, formula } from './0_variables_and_checks_min.js'
 
-// import { checkNum, checkDecimalPlaces, solveBinary, solveUnary, percentage, markUp } from './2_calculation_logic.js'
+import { clearCalc, clearMemory, clearAll } from './1_common_functions_min.js'
 
-// import { delLastChar, addShortedRes, delSeveralLastChars, changeSign, changeDecResult, changeDecNum, getMemNum, changeMemNum, saveMemNum } from './3_other_logic.js'
+import { solveUnary } from './2_calculation_logic_min.js'
 
-// import { clickNumberBtn } from './4_click_numbers.js'
+import { changeDecNum, changeMemNum } from './3_other_logic_min.js'
 
-// import { clickDelLastChar, clickShowMemBtn, clickSolveBtn, clickBinaryBtn, clickPercentBtn, clickMarkUpBtn, clickSaveMemBtn } from './5_click_others.js'
+import { clickNumberBtn } from './4_click_numbers_min.js'
+
+import { clickDelLastChar, clickShowMemBtn, clickSolveBtn, clickBinaryBtn,
+  clickPercentBtn, clickMarkUpBtn, clickSaveMemBtn } from './5_click_others.js'
+
+formula.addEventListener('wheel', (e) => {
+  e.preventDefault()
+  if (formula.value !== '') formula.focus()
+
+  const scrollAmount = e.deltaY / 10
+  const scrollDuration = 200 // milliseconds
+  const startTime = performance.now()
+
+  const scrollStep = () => {
+    const elapsed = performance.now() - startTime
+    const progress = Math.min(elapsed / scrollDuration, 1)
+    const scrollDelta = scrollAmount * progress
+    formula.scrollLeft += scrollDelta
+    if (progress < 1) requestAnimationFrame(scrollStep)
+  }
+
+  scrollStep()
+})
 
 const buttons = document.querySelectorAll('.button')
 
 const actions = {
-  'number': (button) => clickNumberBtn(button.value),
-  'binary': (button) => clickBinaryBtn(button.textContent.trim()),
-  'unary': (button) => solveUnary(currentResult, button.value),
-  'save-mem': (button) => clickSaveMemBtn(button.value[1]), // + or -
-  'reset-calc': clearCalc,
-  'reset-all': clearAll,
-  'del-last-char': clickDelLastChar,
-  'solve': clickSolveBtn,
-  'percent': clickPercentBtn,
-  'mark-up': clickMarkUpBtn,
-  'decimals': changeDecNum,
-  'change-mem': changeMemNum,
-  'reset-mem': clearMemory,
-  'show-mem': clickShowMemBtn
+  number: (button) => clickNumberBtn(button.value),
+  binary: (button) => clickBinaryBtn(button.textContent.trim()),
+  unary: (button) => solveUnary(currentResult, button.value),
+  save_mem: (button) => clickSaveMemBtn(button.value[1]), // + or -
+  reset_calc: clearCalc,
+  reset_all: clearAll,
+  del_last_char: clickDelLastChar,
+  solve: clickSolveBtn,
+  percent: clickPercentBtn,
+  mark_up: clickMarkUpBtn,
+  decimals: changeDecNum,
+  change_mem: changeMemNum,
+  reset_mem: clearMemory,
+  show_mem: clickShowMemBtn
 }
 
 const handleClick = (e) => {
@@ -53,22 +76,3 @@ const handleKeyDown = (e) => {
 buttons.forEach(button => button.addEventListener('click', handleClick))
 
 document.addEventListener('keydown', handleKeyDown)
-
-formula.addEventListener('wheel', (e) => {
-  e.preventDefault()
-  if (formula.value !== '') formula.focus()
-
-  const scrollAmount = e.deltaY / 10
-  const scrollDuration = 200 // milliseconds
-  const startTime = performance.now()
-
-  const scrollStep = () => {
-    const elapsed = performance.now() - startTime
-    const progress = Math.min(elapsed / scrollDuration, 1)
-    const scrollDelta = scrollAmount * progress
-    formula.scrollLeft += scrollDelta
-    if (progress < 1) requestAnimationFrame(scrollStep)
-  }
-
-  scrollStep()
-})

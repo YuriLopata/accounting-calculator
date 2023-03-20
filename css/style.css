@@ -19,7 +19,7 @@ body {
     color: var(--secondary-white-main);
     font-family: 'Lato';
     font-style: normal;
-    font-size: 32px;
+    font-size: 36px;
     font-weight: normal;
 }
 
@@ -62,6 +62,7 @@ body {
     max-width: 50%;
     background-color: var(--primary-white-dark);
     color: var(--secondary-black-main);
+    font-size: 32px;
     text-align: right;
     border: none;
     padding: 1px;
@@ -148,6 +149,10 @@ body {
 
 .button_number:active {
     opacity: 0.8;
+}
+
+#button_delLastChar {
+    font-size: 30px;
 }
 
 .upBar_memButton, #upBar_memValue {
@@ -237,15 +242,38 @@ input::selection {
 }
 
 @media (max-width: 541px) {
+    body {
+        font-size: 32px;
+    }
+
     .workspace {
         width: 100%;
     }
 
-    .display {
-        margin-bottom: 15px;
+    #upBar_memValue {
+        font-size: 16px;
+        line-height: 16px;
+    }
+
+    #upBar_currentResult {
+        font-size: 26px;
+        line-height: 26px;
+    }
+
+    #midBar_result {
+        font-size: 40px;
+        line-height: 40px;
     }
 
     .buttons {
-        height: calc(100svh - 191px - 19px);
+        height: calc(100svh - 182px - 19px);
+    }
+
+    .button_number {
+        font-size: 42px;
+    }
+
+    #button_delLastChar {
+        font-size: 26px;
     }
 }

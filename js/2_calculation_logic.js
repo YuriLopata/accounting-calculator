@@ -1,5 +1,16 @@
 'use strict'
 
+import { mirrorText, currentResult, modifyCurrentResult, result, modifyResult,
+  sign, modifySign, resultText, formula, modifyFormula, operValues,
+  binaryOperChars, solve, modifySolve, isSignChanged, modifyIsSignChanged,
+  isLastCharOper } from './0_variables_and_checks_min.js'
+
+import { rewriteCurrentResult, rewriteResult, rewriteFormula, addToResult,
+  addToFormula, clearResult, clearFormula,
+  clearCurrentResultText } from './1_common_functions_min.js'
+
+import { delLastChar, delSeveralLastChars, changeSign } from './3_other_logic_min.js'
+
 const checkNum = (num) => {
   const numStr = num.toString()
   const lastDigit = parseInt(numStr[numStr.length - 1])
@@ -105,8 +116,8 @@ const solveUnary = (x, oper) => {
       rewriteCurrentResult(x)
       rewriteResult(x + sign)
       rewriteFormula(delSeveralLastChars(mirrorText(formula.value),
-        prevResult.length - 1))
-      result += sign
+        prevResult.length))
+      modifyResult(result + sign)
       addToFormula(result)
     }
 
@@ -169,3 +180,5 @@ const markUp = () => {
     break
   }
 }
+
+export { checkNum, checkDecimalPlaces, solveBinary, solveUnary, percentage, markUp }
