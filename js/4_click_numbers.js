@@ -1,5 +1,14 @@
 'use strict'
 
+import { currentResult, result, modifyResult, sign, modifySign, solve,
+  currentResultText, formula, binaryOperChars, unaryOperChars,
+  isDelLastChar, areClickedNumZeros, isLastChar,
+  isLastCharOper } from './0_variables_and_checks_min.js'
+
+import { resetChecks, rewriteCurrentResult, rewriteResult, addToCurrentResult,
+  addToFormula, addToResultAndFormula, addToAll, clearResult, clearFormula,
+  clearResultsAndOperValues } from './1_common_functions_min.js'
+
 const clickNumberBtn = (clickedNum) => {
   // The set is used in several places of the function
   const numberBtnSet = () => {
@@ -109,3 +118,5 @@ const clickNumberBtn = (clickedNum) => {
     resetChecks()
   }
 }
+
+export { clickNumberBtn }

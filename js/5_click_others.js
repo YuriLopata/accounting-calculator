@@ -1,4 +1,20 @@
 'use strict'
+
+import { currentResult, modifyCurrentResult, result, modifyResult, sign,
+  modifySign, resultText, formula, operValues, unaryOperChars, memShown,
+  modifyMemShown, solve, modifySolve, isDelLastChar, modifyIsDelLastChar,
+  isLastChar, isLastCharOper } from './0_variables_and_checks_min.js'
+
+import { resetChecks, rewriteCurrentResult, rewriteResult, addToResult,
+  addToFormula, addToResultAndFormula, addToAll, clearResult,
+  clearCurrentResultText, addOperValue, clearOperValues,
+  showZeroDevisionError } from './1_common_functions_min.js'
+
+import { solveBinary, percentage, markUp } from './2_calculation_logic_min.js'
+
+import { delLastChar, addShortedRes, changeDecResult,
+  saveMemNum } from './3_other_logic_min.js'
+
 const clickDelLastChar = () => {
   if (solve && result.length === 1 && !isDelLastChar) return
 
@@ -156,3 +172,5 @@ const clickSaveMemBtn = (clickedNum) => {
   modifyMemShown(solveBinary(memShown.value, clickedNum, currentResult))
   saveMemNum(memShown.value)
 }
+
+export { clickDelLastChar, clickShowMemBtn, clickSolveBtn, clickBinaryBtn, clickPercentBtn, clickMarkUpBtn, clickSaveMemBtn }

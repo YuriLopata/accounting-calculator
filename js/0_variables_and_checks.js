@@ -18,10 +18,6 @@ let result = ''
 const modifyResult = (value) => {
   result = value
 }
-let sign = ''
-const modifySign = (value) => {
-  sign = value
-}
 const currentResultText = document.querySelector('#upBar_currentResult')
 const modifyCurrentResultText = (value) => {
   currentResultText.value = value
@@ -33,6 +29,10 @@ const modifyResultText = (value) => {
 const formula = document.querySelector('#downBar_formula')
 const modifyFormula = (value) => {
   formula.value = value
+}
+let sign = ''
+const modifySign = (value) => {
+  sign = value
 }
 const changeDecNumBtn = document.querySelector('#numberOfDecimals')
 const modifyChangeDecNumBtn = (value) => {
@@ -99,3 +99,12 @@ const isLastCharOper = (str) => {
 }
 
 // Checks end
+
+export { mirrorText, currentResult, modifyCurrentResult, result, modifyResult,
+  sign, modifySign, currentResultText, modifyCurrentResultText, resultText,
+  modifyResultText, formula, modifyFormula, changeDecNumBtn,
+  modifyChangeDecNumBtn, operValues, addOperValues, modifyOperValues,
+  binaryOperChars, unaryOperChars, memValues, modifyMemValues, memBtn,
+  modifyMemBtn, memShown, modifyMemShown, solve, modifySolve, isSignChanged,
+  modifyIsSignChanged, isDelLastChar, modifyIsDelLastChar, areClickedNumZeros,
+  isLastChar, isLastCharOper }
