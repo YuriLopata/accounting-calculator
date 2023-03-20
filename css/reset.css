@@ -379,3 +379,11 @@ img {
 button {
     padding: 0;
 }
+
+input,
+textarea,
+button,
+select,
+a {
+    -webkit-tap-highlight-color: transparent;
+}
